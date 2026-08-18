@@ -1,40 +1,32 @@
-Below are the steps to get your plugin running. You can also find instructions at:
+# Slot Master v13.25
 
-  https://www.figma.com/plugin-docs/plugin-quickstart-guide/
+Figma plugin by Alexey Kylik for bulk synchronization, renaming, normalization, title fitting, sorting, and styling of casino and slot-game cards.
 
-This plugin template uses Typescript and NPM, two standard tools in creating JavaScript applications.
+## Main features
 
-First, download Node.js which comes with NPM. This will allow you to install TypeScript and other
-libraries. You can find the download link here:
+- Synchronizes physical Figma cards with spreadsheet rows.
+- Renames cards while keeping titles and identifiers linked to their source rows.
+- Creates missing cards from a shared visual reference.
+- Normalizes card dimensions and internal layout proportions.
+- Fits titles into one to three rows using reference typography.
+- Sorts cards and distributes local gradient styles.
 
-  https://nodejs.org/en/download/
+See `README.txt` for the complete feature and version history.
 
-Next, install TypeScript using the command:
+## Installation
 
-  npm install -g typescript
+1. Clone or download this repository.
+2. In Figma Desktop, open **Plugins → Development → Import plugin from manifest…**.
+3. Select `manifest.json` from this directory.
 
-Finally, in the directory of your plugin, get the latest type definitions for the plugin API by running:
+## Development
 
-  npm install --save-dev @figma/plugin-typings
+The runtime source is plain JavaScript. `manifest.json` loads `code.js` and `ui.html` directly, so no compilation step is required.
 
-If you are familiar with JavaScript, TypeScript will look very familiar. In fact, valid JavaScript code
-is already valid Typescript code.
+Run the local validation before committing changes:
 
-TypeScript adds type annotations to variables. This allows code editors such as Visual Studio Code
-to provide information about the Figma API while you are writing code, as well as help catch bugs
-you previously didn't notice.
+```sh
+npm test
+```
 
-For more information, visit https://www.typescriptlang.org/
-
-Using TypeScript requires a compiler to convert TypeScript (code.ts) into JavaScript (code.js)
-for the browser to run.
-
-We recommend writing TypeScript code using Visual Studio code:
-
-1. Download Visual Studio Code if you haven't already: https://code.visualstudio.com/.
-2. Open this directory in Visual Studio Code.
-3. Compile TypeScript to JavaScript: Run the "Terminal > Run Build Task..." menu item,
-    then select "npm: watch". You will have to do this again every time
-    you reopen Visual Studio Code.
-
-That's it! Visual Studio Code will regenerate the JavaScript file every time you save.
+The check verifies JavaScript syntax, parses the manifest, and confirms that its runtime files exist. GitHub Actions runs the same check for pushes and pull requests.
