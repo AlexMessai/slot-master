@@ -1,0 +1,29 @@
+Slot Master
+Version: 13.25
+
+EN
+Slot Master is a Figma utility for bulk synchronization, renaming, normalization,
+title fitting, sorting, and styling of slot-game cards.
+by Alexey Kylik.
+
+RU
+Slot Master — плагин Figma для массовой синхронизации, переименования,
+нормализации, настройки заголовков, сортировки и стилизации карточек слотов.
+by Alexey Kylik.
+
+
+Create from table:
+Select one reference card and Slot Master can generate one physical card per
+spreadsheet row while preserving the reference content. Each generated frame
+uses the row Identifier and its linked Title.
+
+
+v13.3:
+Create, Normalize, and Title Fit now share one visual reference.
+The actual selected Figma card is rendered as a preview inside Slot Master.
+
+
+v13.4:
+Duplicate reference controls were removed.
+Rename stays reference-free; the one visual shared reference is shown only in
+Normalize and Title Fit.

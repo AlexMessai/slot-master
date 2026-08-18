@@ -1,0 +1,5022 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8" />
+<title>Slot Master</title>
+
+<style>
+  :root{
+    --bg:#f5f5f5;
+    --surface:#ffffff;
+    --surface-2:#fafafa;
+    --line:#e5e5e5;
+    --line-2:#efefef;
+    --text:#111111;
+    --muted:#6b7280;
+    --blue:#111111;
+    --blue-2:#111111;
+    --blue-soft:#f3f4f6;
+    --blue-soft-2:#f8f8f8;
+    --success:#16a34a;
+    --warning:#d97706;
+    --danger:#dc2626;
+    --shadow:none;
+    --radius:16px;
+    --radius-sm:12px;
+  }
+
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  body{
+    font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    font-size:12px;
+    color:var(--text);
+    background:var(--bg);
+    padding:18px;
+  }
+
+  .app-shell{
+    background:#fff;
+    border:1px solid var(--line);
+    border-radius:20px;
+    box-shadow: var(--shadow);
+    overflow:hidden;
+  }
+
+  .hero{
+    padding:16px 18px 12px;
+    border-bottom:1px solid var(--line-2);
+    background:#fff;
+  }
+
+  .hero-top{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    margin-bottom:8px;
+  }
+
+  .hero-spacer{flex:1}
+
+  .lang-switch{
+    display:flex;
+    align-items:center;
+    gap:3px;
+    padding:3px;
+    border:1px solid var(--line);
+    border-radius:12px;
+    background:#f7f7f7;
+  }
+
+  .lang-btn{
+    height:30px;
+    min-width:38px;
+    padding:0 9px;
+    border:0;
+    border-radius:9px;
+    background:transparent;
+    color:var(--muted);
+    box-shadow:none;
+    font-size:11px;
+    font-weight:800;
+  }
+
+  .lang-btn:hover{
+    transform:none;
+    box-shadow:none;
+    border-color:transparent;
+  }
+
+  .lang-btn.active{
+    color:#fff;
+    background:#111111;
+    box-shadow:none;
+  }
+
+  .brand-icon{
+    width:48px;height:48px;border-radius:15px;
+    display:block;
+    object-fit:cover;
+    box-shadow:0 0 0 1px rgba(17,17,17,.06);
+    flex:0 0 auto;
+    background:#070b14;
+  }
+
+  .title-wrap{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    flex-wrap:wrap;
+    min-width:0;
+  }
+  .title-main{
+    display:flex;
+    flex-direction:column;
+    gap:3px;
+    min-width:0;
+  }
+  .title-line{
+    display:flex;
+    align-items:center;
+    gap:9px;
+    flex-wrap:wrap;
+  }
+  h1{
+    margin:0;
+    font-size:24px;
+    line-height:1.1;
+    letter-spacing:-.025em;
+  }
+  .author-line{
+    font-size:11px;
+    line-height:1.35;
+    color:var(--muted);
+    font-weight:650;
+    letter-spacing:.005em;
+  }
+  .version-badge{
+    display:inline-flex;align-items:center;
+    padding:5px 10px;border-radius:999px;
+    background:#f3f4f6;
+    color:#111111;font-weight:700;font-size:12px;
+  }
+
+  .sub{
+    margin:0;
+    color:var(--muted);
+    font-size:13px;
+    line-height:1.5;
+    max-width:680px;
+  }
+
+  .content{padding:14px 16px 16px}
+
+  .box, .normalize-box, .section, .stat{
+    background:var(--surface);
+    border:1px solid var(--line);
+    border-radius:var(--radius);
+    box-shadow:none;
+  }
+
+  .box, .normalize-box{padding:16px;margin-bottom:14px}
+  .normalize-title,.label{
+    display:flex;align-items:center;gap:10px;
+    margin:0 0 8px;
+    font-size:20px;font-weight:800;letter-spacing:-.02em;color:var(--text);
+  }
+  .label{font-size:17px}
+  .normalize-title::before,.label::before{
+    content:"";
+    width:10px;height:10px;border-radius:999px;
+    background:#111111;
+    box-shadow:0 0 0 4px #f1f1f1;
+    flex:0 0 auto;
+  }
+
+  textarea{
+    width:100%;
+    min-height:180px;
+    resize:vertical;
+    border:1px solid var(--line);
+    border-radius:14px;
+    padding:12px 14px;
+    background:var(--surface-2);
+    color:var(--text);
+    font: 12px ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    line-height:1.45;
+    outline:none;
+  }
+  textarea:focus,
+  .field input[type="number"]:focus,
+  .field select:focus{
+    border-color:#111111;
+    box-shadow:0 0 0 3px rgba(17,17,17,.08);
+  }
+
+  .hint,#selection,#preview,.ref{
+    color:var(--muted);
+    line-height:1.5;
+  }
+
+  .row{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px}
+
+  button{
+    height:40px;
+    border-radius:14px;
+    padding:0 14px;
+    border:1px solid var(--line);
+    background:#fff;
+    color:var(--text);
+    cursor:pointer;
+    font-weight:700;
+    font-size:13px;
+    transition:transform .12s ease, box-shadow .12s ease, border-color .12s ease;
+  }
+  button:hover{transform:none;box-shadow:none;border-color:#cfcfcf}
+  button.primary{
+    color:#fff;
+    border-color:#111111;
+    background:#111111;
+    box-shadow:none;
+  }
+  button:disabled{opacity:.45;cursor:default;transform:none;box-shadow:none}
+
+  .checks{
+    display:grid;
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    gap:12px 18px;
+    margin:12px 0;
+    padding:14px;
+    border:1px solid var(--line-2);
+    border-radius:14px;
+    background:#fbfbfb;
+  }
+  .checks label{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    color:var(--text);
+    font-weight:500;
+  }
+  input[type="checkbox"]{accent-color:#111111}
+  input[type="range"]{accent-color:#111111}
+
+  .autofit-grid{
+    display:grid;
+    grid-template-columns:repeat(5,minmax(0,1fr));
+    gap:10px;
+    margin:12px 0;
+  }
+  .field label{
+    display:block;
+    font-size:11px;
+    margin-bottom:5px;
+    color:var(--muted);
+    font-weight:600;
+  }
+  .inline-setting{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    min-height:44px;
+    margin:10px 0;
+    padding:8px 10px;
+    border:1px solid var(--line-2);
+    border-radius:12px;
+    background:#fafafa;
+  }
+  .inline-setting label{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    flex:1;
+    color:var(--text);
+    font-weight:500;
+  }
+  .inline-setting .mini-number{
+    width:76px;
+    height:34px;
+    border:1px solid var(--line);
+    border-radius:10px;
+    padding:0 9px;
+    background:#fff;
+    color:var(--text);
+    outline:none;
+    text-align:right;
+  }
+  .inline-setting .suffix{
+    color:var(--muted);
+    font-size:11px;
+    margin-left:-5px;
+  }
+
+  .field input[type="number"],
+  .field select{
+    width:100%;
+    height:38px;
+    border:1px solid var(--line);
+    border-radius:12px;
+    padding:0 10px;
+    background:#fff;
+    color:var(--text);
+    outline:none;
+  }
+
+  #status, #normalizeStatus, #autoFitStatus{margin-top:12px;line-height:1.5}
+
+  .ok{color:var(--success)}
+  .warn{color:var(--warning)}
+  .err{color:var(--danger)}
+
+  .summary{
+    display:grid;
+    grid-template-columns:repeat(4,minmax(0,1fr));
+    gap:10px;
+    margin-top:12px;
+  }
+  .stat{padding:14px 16px}
+  .stat strong{
+    display:block;
+    font-size:26px;
+    line-height:1;
+    margin-bottom:4px;
+    letter-spacing:-.03em;
+  }
+
+  .section{margin-top:14px;overflow:hidden}
+  .section-head{
+    padding:12px 14px;
+    font-weight:800;
+    font-size:14px;
+    background:#fafafa;
+    border-bottom:1px solid var(--line-2);
+  }
+  .list{max-height:220px;overflow:auto;padding:0 14px}
+  .item{
+    padding:10px 0;
+    border-bottom:1px solid var(--line-2);
+  }
+  .item:last-child{border-bottom:0}
+
+  code{
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    background:#f7f7f7;
+    border:1px solid #dce9ff;
+    color:#355587;
+    padding:2px 6px;
+    border-radius:8px;
+  }
+
+  details{
+    margin-top:10px;
+    border:1px solid var(--line-2);
+    background:#fbfbfb;
+    border-radius:14px;
+    padding:8px 12px;
+  }
+  summary{
+    cursor:pointer;
+    font-weight:700;
+    color:var(--text);
+  }
+
+  .note{
+    margin-top:12px;
+    padding:12px 14px;
+    border-radius:14px;
+    background:#fafafa;
+    border:1px solid var(--line-2);
+    color:var(--muted);
+  }
+
+  .pill-note{
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    margin-top:8px;
+    padding:8px 12px;
+    border-radius:999px;
+    background:#f5f5f5;
+    color:#444444;
+    font-weight:600;
+  }
+
+  
+  .toolbar-actions{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    margin-right:8px;
+  }
+  .icon-btn{
+    width:36px;height:36px;
+    display:flex;align-items:center;justify-content:center;
+    border-radius:12px;
+    border:1px solid var(--line);
+    background:#fff;
+    color:var(--muted);
+    font-size:16px;
+    cursor:pointer;
+    box-shadow:none;
+  }
+  .icon-btn:hover{transform:none;box-shadow:none;border-color:#d4d4d4}
+  .tabs{
+    display:grid;
+    grid-template-columns:repeat(5,minmax(0,1fr));
+    gap:0;
+    margin-top:14px;
+    border-top:1px solid var(--line-2);
+    border-bottom:1px solid var(--line-2);
+    padding-top:8px;
+  }
+  .tab-btn{
+    white-space:nowrap;
+    height:auto;
+    min-height:48px;
+    min-width:0;
+    border:none;
+    border-radius:0;
+    background:transparent;
+    box-shadow:none;
+    display:flex;
+    flex-direction:row;
+    align-items:center;
+    justify-content:center;
+    gap:5px;
+    padding:0 6px;
+    color:var(--muted);
+    position:relative;
+    font-size:10.5px;
+    font-weight:650;
+    overflow:hidden;
+  }
+  .tab-btn span:last-child{
+    min-width:0;
+    overflow:hidden;
+    text-overflow:ellipsis;
+  }
+  .tab-btn .tab-ico{
+    flex:0 0 auto;
+    font-size:14px;
+    line-height:1;
+  }
+  .tab-btn:hover{transform:none;box-shadow:none;border-color:transparent}
+  .tab-btn.active{
+    color:#111111;
+  }
+  .tab-btn.active::after{
+    content:"";
+    position:absolute;
+    left:12%;
+    right:12%;
+    bottom:-1px;
+    height:2px;
+    border-radius:999px;
+    background:#111111;
+  }
+  .tab-panel{display:none}
+  .tab-panel.active{display:block}
+  .top-inline-actions{
+    display:flex;
+    gap:10px;
+    margin:0 0 14px;
+  }
+  .danger-btn{
+    color:#b4232d;
+    background:#fff5f5;
+    border-color:#ffd4d8;
+  }
+  .danger-btn:hover{border-color:#ffb8c0}
+  .stack-gap{display:flex;flex-direction:column;gap:14px}
+  .panel-note{
+    margin-top:6px;
+    color:var(--muted);
+  }
+
+  .hero{padding-bottom:0}
+  .hero-top{margin-bottom:10px}
+  .hero .sub{font-size:12px;max-width:620px}
+
+  .workspace-strip{
+    display:flex;align-items:center;gap:8px;
+    margin-bottom:14px;flex-wrap:wrap;
+  }
+  .workspace-spacer{flex:1}
+  .minimal-status-row{
+    min-height:28px;
+    margin-bottom:12px;
+  }
+  .minimal-status{
+    color:var(--muted);
+    font-size:12px;
+    line-height:28px;
+    white-space:nowrap;
+  }
+
+  .sync-card{
+    border:1px solid var(--line);
+    border-radius:14px;
+    padding:16px;
+    margin-top:14px;
+    background:var(--surface);
+  }
+  .sync-head{
+    display:flex;
+    align-items:flex-start;
+    gap:12px;
+    justify-content:space-between;
+    margin-bottom:12px;
+  }
+  .sync-title{
+    font-size:15px;
+    font-weight:750;
+    color:var(--text);
+  }
+  .sync-desc{
+    margin-top:4px;
+    color:var(--muted);
+    font-size:12px;
+    line-height:1.45;
+    max-width:520px;
+  }
+  .sync-summary{
+    display:grid;
+    grid-template-columns:repeat(5,minmax(0,1fr));
+    gap:8px;
+    margin-top:12px;
+  }
+  .sync-stat{
+    border:1px solid var(--line);
+    border-radius:10px;
+    padding:9px 10px;
+    background:var(--surface-2);
+    min-width:0;
+  }
+  .sync-stat strong{
+    display:block;
+    font-size:20px;
+    line-height:1;
+    margin-bottom:4px;
+  }
+  .sync-stat span{
+    display:block;
+    color:var(--muted);
+    font-size:10px;
+    line-height:1.2;
+  }
+  .sync-review-list{
+    display:grid;
+    gap:8px;
+    margin-top:10px;
+  }
+  .sync-review-item{
+    border:1px solid var(--line);
+    border-radius:10px;
+    padding:10px;
+    background:var(--surface-2);
+  }
+  .sync-review-pair{
+    display:grid;
+    grid-template-columns:minmax(0,1fr) 52px minmax(0,1fr);
+    gap:8px;
+    align-items:center;
+  }
+  .sync-review-side{
+    min-width:0;
+  }
+  .sync-review-kicker{
+    color:var(--muted);
+    font-size:9px;
+    text-transform:uppercase;
+    letter-spacing:.05em;
+    margin-bottom:3px;
+  }
+  .sync-review-main{
+    font-size:11px;
+    font-weight:700;
+    overflow-wrap:anywhere;
+  }
+  .sync-review-sub{
+    color:var(--muted);
+    font-size:10px;
+    margin-top:3px;
+    overflow-wrap:anywhere;
+  }
+  .sync-score{
+    text-align:center;
+    font-size:12px;
+    font-weight:800;
+  }
+  .sync-review-actions{
+    display:flex;
+    gap:6px;
+    margin-top:8px;
+    justify-content:flex-end;
+  }
+  .sync-review-item.confirmed{
+    border-color:#18a957;
+  }
+  .sync-review-item.rejected{
+    opacity:.58;
+  }
+  .sync-details{
+    margin-top:10px;
+  }
+  .sync-details summary{
+    cursor:pointer;
+    font-size:11px;
+    font-weight:700;
+  }
+  .sync-small-list{
+    max-height:180px;
+    overflow:auto;
+    margin-top:8px;
+    border-top:1px solid var(--line);
+  }
+  .sync-small-row{
+    padding:7px 0;
+    border-bottom:1px solid var(--line);
+    font-size:10px;
+    overflow-wrap:anywhere;
+  }
+  @media (max-width:620px){
+    .sync-summary{grid-template-columns:repeat(2,minmax(0,1fr))}
+    .sync-review-pair{grid-template-columns:1fr}
+    .sync-score{text-align:left}
+  }
+
+  .rename-sort-card{
+    display:block;
+    margin-top:14px;
+    padding:14px;
+    border:1px solid var(--line);
+    border-radius:14px;
+    background:#fafafa;
+  }
+  .rename-sort-copy{min-width:0}
+  .rename-sort-title{
+    font-size:13px;
+    font-weight:750;
+    color:var(--text);
+  }
+  .rename-sort-desc{
+    margin-top:3px;
+    color:var(--muted);
+    font-size:11px;
+    line-height:1.4;
+  }
+  .rename-sort-settings{
+    display:grid;
+    grid-template-columns:repeat(3,minmax(0,1fr));
+    gap:8px;
+    margin-top:12px;
+  }
+  .rename-sort-settings select,
+  .rename-sort-settings input{
+    width:100%;
+    height:38px;
+    border:1px solid var(--line);
+    border-radius:12px;
+    padding:0 10px;
+    background:#fff;
+    color:var(--text);
+    outline:none;
+  }
+  .rename-sort-settings select:focus,
+  .rename-sort-settings input:focus{
+    border-color:#111;
+    box-shadow:0 0 0 3px rgba(17,17,17,.08);
+  }
+  .rename-sort-actions{
+    display:flex;
+    justify-content:flex-end;
+    margin-top:10px;
+  }
+  .rename-sort-actions button{min-width:210px}
+
+  .minimal-status b{
+    color:var(--text);
+    font-weight:700;
+  }
+  .minimal-status .sep{
+    display:inline-block;
+    margin:0 8px;
+    color:#cfcfcf;
+  }
+
+  .section-card{
+    background:#fff;border:1px solid var(--line);
+    border-radius:16px;padding:16px;
+    box-shadow:0 5px 14px rgba(30,72,130,.035);
+  }
+  .section-card + .section-card{margin-top:12px}
+  .step-head{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+  .step-badge{
+    width:28px;height:28px;border-radius:50%;
+    display:flex;align-items:center;justify-content:center;
+    background:#111111;
+    color:#fff;font-weight:800;
+    box-shadow:none;
+  }
+  .step-title{font-size:16px;font-weight:800;color:var(--text)}
+  .step-desc{color:var(--muted);line-height:1.45;margin:0 0 12px 38px}
+  .normalize-gear-badge{
+    font-size:14px;
+    line-height:1;
+  }
+
+  .primary-lg{min-height:44px;padding:0 18px;font-size:14px}
+
+  .subtabs{
+    display:flex;gap:4px;padding:4px;
+    border:1px solid var(--line);
+    background:#f7f7f7;border-radius:12px;
+    margin-bottom:14px;
+  }
+  .subtab-btn{
+    flex:1;height:36px;border:0;border-radius:9px;
+    background:transparent;box-shadow:none;color:var(--muted);
+  }
+  .subtab-btn:hover{transform:none;box-shadow:none;border-color:transparent}
+  .subtab-btn.active{
+    background:#fff;color:#111111;
+    box-shadow:0 4px 12px rgba(40,89,166,.08);
+  }
+  .subpanel{display:none}
+  .subpanel.active{display:block}
+
+  .quick-card{
+    position:relative;overflow:hidden;
+    border:1px solid var(--line);
+    background:#fafafa;
+    border-radius:18px;padding:18px;
+  }
+  .quick-card::after{
+    content:"";position:absolute;width:150px;height:150px;
+    right:-55px;top:-75px;border-radius:50%;
+    background:rgba(17,17,17,.04);
+  }
+  .quick-title{font-size:18px;font-weight:850;margin-bottom:6px}
+  .quick-desc{color:var(--muted);line-height:1.45;max-width:620px;margin-bottom:14px}
+  .quick-meta{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:14px}
+  .mini-pill{
+    padding:5px 9px;border-radius:999px;
+    border:1px solid #e5e5e5;background:#fff;
+    color:#444444;font-size:11px;font-weight:650;
+  }
+
+  details.advanced{margin-top:12px;border:1px solid var(--line-2);background:#fbfdff}
+  details.advanced summary{
+    list-style:none;display:flex;align-items:center;justify-content:space-between;
+    padding:2px 0;color:#555555;
+  }
+  details.advanced summary::-webkit-details-marker{display:none}
+  details.advanced summary::after{content:"⌄";font-size:15px}
+  details.advanced[open] summary::after{content:"⌃"}
+  .advanced-body{padding-top:10px}
+
+  .operation-bar{
+    display:none;position:sticky;bottom:0;z-index:50;
+    margin:14px -18px -18px;padding:12px 18px;
+    border-top:1px solid var(--line);
+    background:rgba(255,255,255,.98);
+    box-shadow:none;
+    align-items:center;gap:12px;
+  }
+  .operation-bar.active{display:flex}
+  .operation-spinner{
+    width:16px;height:16px;border-radius:50%;
+    border:2px solid #e5e5e5;border-top-color:#111111;
+    animation:spin .8s linear infinite;flex:0 0 auto;
+  }
+  @keyframes spin{to{transform:rotate(360deg)}}
+  .operation-copy{flex:1;min-width:0}
+  .operation-title{font-weight:750;color:var(--text)}
+  .operation-sub{font-size:11px;color:var(--muted);margin-top:2px}
+  .stop-compact{
+    height:36px;padding:0 12px;border-radius:10px;
+    color:#111111;background:#ffffff;border-color:#d4d4d4;
+  }
+
+  .empty-report{text-align:center;padding:30px 16px;color:var(--muted)}
+  .empty-report .big{font-size:24px;margin-bottom:8px}
+  .compact-box{padding:14px;margin-bottom:12px}
+  .compact-box .label{font-size:15px}
+  textarea{min-height:150px}
+  .toolbar-actions .icon-btn:first-child{display:none}
+
+
+  .hero-top{gap:10px}
+  h1{font-size:24px}
+  .version-badge{border:1px solid var(--line)}
+  .lang-switch{background:#fff}
+  .tab-btn.active::after{background:#111111;height:2px;bottom:-1px}
+  .step-badge{background:#111111}
+  .quick-card::after{display:none}
+  .operation-bar{border-top:1px solid var(--line)}
+  .stop-compact:hover,.danger-btn:hover{border-color:#111111}
+  button.primary:hover{border-color:#111111}
+  .icon-btn,.status-chip,.subtabs,.checks,.note,.section-card,.box,.normalize-box,.section,.stat{box-shadow:none}
+  .app-shell,.hero,.content,.box,.normalize-box,.section-card,.quick-card,.operation-bar{backdrop-filter:none}
+
+
+  .structure-preview{
+    margin:12px 0 14px;
+    padding:12px 14px;
+    border:1px solid var(--line);
+    border-radius:12px;
+    background:#fafafa;
+    font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+    font-size:12px;
+    line-height:1.8;
+  }
+  .structure-preview span{
+    color:var(--muted);
+    font-family:Inter,system-ui,sans-serif;
+    font-size:10px;
+    margin-left:6px;
+  }
+  .structure-parent{font-weight:750;color:var(--text)}
+  .structure-child{padding-left:14px;color:#444}
+  .title-settings-grid{grid-template-columns:repeat(3,minmax(0,1fr));}
+
+
+  .titlefit-panel{
+    border:1px solid var(--line);
+    border-radius:16px;
+    background:#fff;
+    overflow:hidden;
+  }
+  .titlefit-head{
+    padding:18px 18px 4px;
+  }
+  .titlefit-heading{
+    font-size:18px;
+    font-weight:800;
+    color:var(--text);
+  }
+  .titlefit-lead{
+    margin-top:5px;
+    color:var(--muted);
+    line-height:1.45;
+    font-size:12px;
+  }
+  .titlefit-step{
+    display:flex;
+    gap:12px;
+    padding:16px 18px;
+  }
+  .titlefit-step-index{
+    width:24px;
+    height:24px;
+    flex:0 0 24px;
+    border-radius:50%;
+    background:#111;
+    color:#fff;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:11px;
+    font-weight:800;
+  }
+  .titlefit-step-body{
+    flex:1;
+    min-width:0;
+  }
+  .titlefit-step-title{
+    font-size:14px;
+    font-weight:750;
+    color:var(--text);
+  }
+  .titlefit-step-hint{
+    margin-top:4px;
+    color:var(--muted);
+    font-size:11px;
+    line-height:1.45;
+  }
+  .titlefit-main-btn{
+    margin-top:12px;
+    width:100%;
+  }
+  .titlefit-template-card{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    margin-top:10px;
+    padding:10px;
+    border:1px solid var(--line);
+    border-radius:12px;
+    background:#fafafa;
+  }
+  .titlefit-template-card.empty{
+    opacity:.7;
+  }
+  .titlefit-template-icon{
+    width:34px;
+    height:34px;
+    border-radius:10px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background:#111;
+    color:#fff;
+    font-weight:800;
+  }
+  .titlefit-template-copy{min-width:0}
+  .titlefit-template-state{
+    font-size:12px;
+    font-weight:700;
+    color:var(--text);
+  }
+  .titlefit-template-meta{
+    margin-top:2px;
+    color:var(--muted);
+    font-size:10px;
+    line-height:1.4;
+  }
+  .titlefit-divider{
+    height:1px;
+    background:var(--line-2);
+    margin:0 18px;
+  }
+  .titlefit-grid{
+    display:grid;
+    grid-template-columns:repeat(4,minmax(0,1fr));
+    gap:8px;
+    margin-top:12px;
+  }
+  .titlefit-grid .field input{
+    width:100%;
+  }
+  .titlefit-preview-list{
+    display:grid;
+    gap:8px;
+    margin-top:10px;
+  }
+  .titlefit-preview-item{
+    display:grid;
+    grid-template-columns:88px minmax(0,1fr);
+    gap:10px;
+    align-items:center;
+    padding:10px;
+    border:1px solid var(--line);
+    border-radius:10px;
+    background:#fafafa;
+  }
+  .titlefit-preview-thumb{
+    width:88px;
+    height:122px;
+    border-radius:10px;
+    overflow:hidden;
+    border:1px solid var(--line-2);
+    background:#0b0d14;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+  }
+  .titlefit-preview-thumb img{
+    display:block;
+    width:100%;
+    height:100%;
+    object-fit:contain;
+    background:#0b0d14;
+  }
+  .titlefit-preview-copy{
+    min-width:0;
+  }
+  .titlefit-before{
+    color:var(--muted);
+    font-size:10px;
+  }
+  .titlefit-after{
+    margin-top:4px;
+    font-weight:700;
+    color:var(--text);
+    font-size:11px;
+    line-height:1.35;
+  }
+
+@media (max-width: 720px){
+    .summary{grid-template-columns:1fr 1fr}
+    .checks{grid-template-columns:1fr}
+    .autofit-grid{grid-template-columns:1fr}
+  }
+
+  .shared-reference-card{
+    display:grid;
+    grid-template-columns:132px minmax(0,1fr) auto;
+    gap:12px;
+    align-items:center;
+    margin-bottom:14px;
+    padding:10px;
+    border:1px solid var(--line);
+    border-radius:14px;
+    background:#fff;
+  }
+  .shared-reference-preview{
+    width:132px;
+    height:76px;
+    border-radius:10px;
+    overflow:hidden;
+    background:#f5f5f5;
+    border:1px solid var(--line-2);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+  }
+  .shared-reference-preview img{
+    display:none;
+    width:100%;
+    height:100%;
+    object-fit:contain;
+    background:#0b0d14;
+  }
+  .shared-reference-card.ready .shared-reference-preview img{display:block}
+  .shared-reference-card.ready .shared-reference-placeholder{display:none}
+  .shared-reference-placeholder{
+    width:30px;
+    height:30px;
+    border:2px solid #c5c5c5;
+    border-radius:7px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    color:#999;
+    font-size:18px;
+    font-weight:700;
+  }
+  .shared-reference-copy{min-width:0}
+  .shared-reference-eyebrow{
+    font-size:9px;
+    line-height:1.2;
+    font-weight:800;
+    color:var(--muted);
+    text-transform:uppercase;
+    letter-spacing:.07em;
+    margin-bottom:4px;
+  }
+  .shared-reference-name{
+    font-size:13px;
+    line-height:1.25;
+    font-weight:800;
+    color:var(--text);
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+  }
+  .shared-reference-meta{
+    margin-top:3px;
+    color:var(--muted);
+    font-size:10px;
+    line-height:1.4;
+  }
+  .shared-reference-status{
+    margin-top:4px;
+    font-size:10px;
+  }
+  .shared-reference-actions{
+    display:flex;
+    flex-direction:column;
+    gap:6px;
+  }
+  .shared-reference-actions button{min-width:132px}
+  .shared-reference-card.empty{background:#fafafa}
+  @media (max-width:620px){
+    .shared-reference-card{
+      grid-template-columns:100px minmax(0,1fr);
+    }
+    .shared-reference-preview{
+      width:100px;
+      height:62px;
+    }
+    .shared-reference-actions{
+      grid-column:1 / -1;
+      flex-direction:row;
+    }
+    .shared-reference-actions button{
+      min-width:0;
+      flex:1;
+    }
+  }
+
+
+  /* v13.6 — larger tab labels */
+  .tab-btn{
+    font-size:12px;
+    font-weight:750;
+  }
+
+  .tab-ico{
+    font-size:13px;
+  }
+
+
+  /* v13.9 — compact title tooltips */
+  .step-title-row{
+    display:flex;
+    align-items:center;
+    gap:7px;
+    min-width:0;
+  }
+
+  .auto-gradient-title-row{
+    margin-top:0;
+  }
+
+  .info-tip{
+    position:relative;
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    width:18px;
+    height:18px;
+    min-width:18px;
+    border:1px solid var(--line);
+    border-radius:50%;
+    background:#fff;
+    color:#666;
+    font-size:11px;
+    line-height:1;
+    font-weight:800;
+    font-family:Arial,sans-serif;
+    cursor:help;
+    outline:none;
+    user-select:none;
+  }
+
+  .info-tip:hover,
+  .info-tip:focus{
+    color:#111;
+    border-color:#bdbdbd;
+    background:#f7f7f7;
+  }
+
+  .info-tip-tooltip{
+    position:absolute;
+    left:50%;
+    top:calc(100% + 9px);
+    transform:translateX(-18%);
+    width:340px;
+    max-width:min(340px, calc(100vw - 72px));
+    padding:11px 12px;
+    border-radius:10px;
+    background:#171717;
+    color:#fff;
+    font-size:11px;
+    line-height:1.5;
+    font-weight:500;
+    letter-spacing:0;
+    text-align:left;
+    white-space:normal;
+    box-shadow:0 8px 28px rgba(0,0,0,.22);
+    opacity:0;
+    visibility:hidden;
+    pointer-events:none;
+    z-index:100;
+    transition:opacity .12s ease, visibility .12s ease;
+  }
+
+  .info-tip-tooltip::before{
+    content:"";
+    position:absolute;
+    top:-5px;
+    left:18%;
+    width:10px;
+    height:10px;
+    background:#171717;
+    transform:rotate(45deg);
+  }
+
+  .info-tip:hover .info-tip-tooltip,
+  .info-tip:focus .info-tip-tooltip{
+    opacity:1;
+    visibility:visible;
+  }
+
+  .info-tip-tooltip .tooltip-lead{
+    display:block;
+    margin-bottom:6px;
+    font-weight:700;
+  }
+
+  .info-tip-tooltip .tooltip-note{
+    display:block;
+    color:#d3d3d3;
+  }
+
+
+  /* v13.10 — reference controls */
+  .shared-reference-card{
+    position:relative;
+  }
+
+  .shared-reference-preview{
+    position:relative;
+  }
+
+  .shared-reference-clear{
+    position:absolute;
+    top:5px;
+    right:5px;
+    z-index:6;
+    width:22px;
+    height:22px;
+    min-width:22px;
+    min-height:22px;
+    padding:0;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    border:1px solid rgba(255,255,255,.9);
+    border-radius:7px;
+    background:rgba(17,17,17,.78);
+    color:#fff;
+    font-size:16px;
+    line-height:1;
+    font-weight:500;
+    cursor:pointer;
+    box-shadow:0 1px 4px rgba(0,0,0,.22);
+    backdrop-filter:blur(4px);
+  }
+
+  .shared-reference-clear:hover:not(:disabled){
+    background:#111;
+    color:#fff;
+    border-color:#fff;
+  }
+
+  .shared-reference-clear:disabled{
+    display:none;
+  }
+
+  button:disabled{
+    cursor:not-allowed;
+  }
+
+
+  /* v13.12 — dedicated Sort tab */
+  #tab-sort .rename-sort-card{
+    margin-top:0;
+  }
+
+  #tab-sort #sortFramesStatus{
+    margin:8px 4px 0 !important;
+  }
+
+
+  /* v13.13 — keep all navigation tabs in one row */
+  .tabs{
+    display:grid;
+    grid-template-columns:repeat(6,minmax(0,1fr));
+    gap:0;
+    overflow:visible;
+  }
+
+  .tab-btn{
+    min-width:0;
+    width:100%;
+    padding-left:4px;
+    padding-right:4px;
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+  }
+
+  .tab-btn .tab-ico{
+    flex:0 0 auto;
+  }
+
+  .tab-btn span:last-child{
+    min-width:0;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    white-space:nowrap;
+  }
+
+  /* The report label is now short enough to fit without wrapping. */
+  #tabReportsBtn span:last-child{
+    overflow:visible;
+    text-overflow:clip;
+  }
+
+
+  /* v13.14 */
+  .sort-actions-left{
+    display:flex;
+    justify-content:flex-start;
+  }
+
+  .sort-actions-left #sortFramesAlpha{
+    margin-left:0;
+    margin-right:auto;
+  }
+
+  .magic-wand-icon{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    width:28px;
+    height:28px;
+    min-width:28px;
+    border-radius:50%;
+    background:#111;
+    color:#fff;
+  }
+
+  .magic-wand-icon svg{
+    display:block;
+    width:16px;
+    height:16px;
+  }
+
+</style>
+
+</head>
+<body>
+<div class="app-shell">
+  <div class="hero">
+    <div class="hero-top">
+      <img class="brand-icon" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAOQAAADkCAYAAACIV4iNAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAOdEVYdFNvZnR3YXJlAEZpZ21hnrGWYwAAERlJREFUeAHt3VtsHFcZB/DvzHoTp1y8fUDiKXYlELyQBAkBD7RxBEIgoEkFQuLSNgiQAHETFwnEpaUgtYjei1oJCr33ASo1CfShCKl22pdCpTrtCwikOnkq4qFretvYu3M4/7HHGa937d2dMzPfzPx/kmvHcdJ1PP8592+MKDE93Zpb68m8MeGsEZmzxsxZ995YaYlxb0RpWWlbI213fS3jY/eJJSvBmcDK8tpae0kUMFIQBLBnw6PWmnn3y3mGjgoVBVQWTBCeaEhjsdNpL0sBcg1ky3mlI98Waw8LQkik15IRe2/DBCfzDGcugZyabs27EF4jDCGVkZUTEprbut32gmQs00AyiFQl0djThNeudV6+TzKSSSAZRKqyKJihuSKLiaBAPMIYsbnnzfe4MD4hDCNVFGb/bWCfxbWOyUnxqCGe7Lmodez8eRdEY94vRHVgzCEXzmON5p522F09Ix6kDiRaxTU7fYNrFW9xbfm0ENWLW64zx4Jgbyt8876npdPpSAqpxpDra4n2CTThQlRzGFs2jDmSZplk4jFks9k61A3tswwj0TpkAQ0UsiETmiiQzenWcWswXuTuGqKkaMLHZaM5/aarZQJjjyGjMFp7D8eLRENE2TCY7Fked7JnrEBuhpGIRjB+KEee1EG/mN1UojFZaRtrjoy6iWCkQHI2lSgFF8qpwLx7lNnXXSd1sM7IMBKl4HqVyBDCtNuX7jqGjBb9RT4iRJRGK1i102F4/vGdvmjHLisncYj8stZc0Vttnxj2+0MDyXEjUQbceLJ7kblE2u32oN8eOobsheE1DCORZ2482XwtvGX4bw8QLXEE9lkhomz0zJFBFQgGt5CBfVSIKDuN6AD/NtsCGU3ksKtKlLX5qanWfP8nt3VZm3tnXmAgiXKx0D2/ciT5iS0tJGrhMIxEudnWSm7tslr7LSGi/PSNJTe7rFh37Fr7ghBRrrr7zMXxuuRmC4my/kJEuZt6LdzsmW4G0oo5LkSUPxM932b9Q/yH3VWiYk2Z83OdTuds1EL2WNSYqFA9u+cY3keBtNZy/EhUoI3HMq53Waf2zLzE0hxEBcIpkNWVi4PmG1qHGEaigrkMTk9PzwbhGnfmEGmw1mvOB0bCg0JEhTPGzAV4go8QUeHchM4cZlk5fiRSwKKF5OkOIh2QxcBYtpBEGiCLZmrvjBUiUmHi50MSkX8MJJEiDCSRIgwkkSIMJJEiDCSRIgwkkSIMJJEiDCSRIgwkkSIMJJEiDCSRIgwkkSIMJJEiDCSRIgwkkSIMJJEiDCSRIgwkkSIMJJEiDCSRIgwkkSIMJJEiDCSRIgwkkSIMJJEiDCSRIgwkkSIMJJEiDCSRIgwkkSIMJJEiDCSRIgwkkSIMJJEiU1ITrdaMzO7fLwcPvktmZmbWfz27f/P35zY+brdXpL2yEn189uy56Nfnzq2/P/Pc89F7oqxUMpAI28ED75LLL/9Y9B5v+JwPcTAXTz8lp90b3uftqPu+DrjvqQj4/u/49V3i209+/AMpQlE/w2HM1N4ZKxWAwF35+c9GF+vhyz4gecEFih/oqT89Jvc/8LDk4Xe/vVOuuvKzUpS3vHXWa08BvZN//fM5KcJ1v7hBfu7etCj9GBLh++tf/iz/ffGs3Hzj9bmGEXAjwE0AIcFFdbd7n+wKV9Hln/iY+HRZzj8zzUobyDiIeDus5AeKO/3VruX6d8WDiXG4T1p+fhqULpAagzhIHMyfFjQ2ypLvFpKBvKBUgUSXVHsQ+2GyAl3ZKrWW6An4+n7Q2la9iz+OUgQS4zQE8Rtf/6qUES5gtJZlff2D+GolDxY0W6yV+kDiYn7m6Scr0a1BC1+VLqyvcSSWpugC1YGMW8YqdWnQha1CS3nUUwt5+FKOH5NUB/KmX11fyfEFWsqyd9Vws0y7OQGtrK8NG1WhNpBY+C5y8Ttrj/zxodJfjGmHEZexddxGbSCruFyQhLFx2buuR1OO/45y/LiNykCiZazDVPg3XSDL3Eqm7XZzhnU7lYGseusYi/fflhVe/6TdVvw5jh+3U3faI8+FYhyvWjj9lKysrGzbLI2796EcXgu6bVmcnsgL9qFOclqC+1cHUxfIrAf6CN7tLgA4mYFA7gbB/OY3vprZBFPcUpT1nCVe/89lfNwuN5i6Luvhw9n9oJZdAN/zvkuj4zajhBFw9vGLX/6afPf7P5SslHksNelZUwZyMHWBnMuwi/ihD3985CD2u/2OuzIL5YESBzI+DD4OhnE4dYHMqrU4eeqxicMYQyjRYvrm+zhT3sbd/sbtcsOpCmSWEyhxnZy07rs/n6oAZTLu9jcudwxXm6pz2HvpY5odBa98myv5mus4W+DSLJXUQa2qzv3kRz9IPQ5cOvN86q5vvypUssPsOOoK7YZh3FltAglYvphxwRxnlrUf/tzb3nFAaCvMjo8SyDTrj7hxVX0zQe0KJcelNXCsqy5b9HZynaeKa6MeWE7TQl6nqDpcVlS1kL67gjvBhRFfHNhpgtnTU24mtm7FkH39m8dlPXb6+/A1nNDZmboWMs9QxhBMbPSOy0k+87cno6pxaEGrfgFFldo93YB2a/3SLO/gNT6XwZKTNuoCuaTgHx0hRNcWtVYRzrVOOwrrTTdeH+09rdI4Bt/LKGO/Uew2PkxThwe9mDoML9QFcnFRT1n3pLgVfeQPD21pRcseULRavkrp71bWI834ETcNBrIAvu7WWYtb0TigZZ0kwgOIfP2b9z/AKClt6UjcNMq+XjsKlWNITQ8/GRXu/ujilm0GFxd5/AAhH4Z1S9Msd5zZWPtlC1kQTQ8/mUQynNofKRC/Nl83wWHd0jTd1XheoQ4HmlUGclHZI8LSiNc9UUFP4wWF1xRN7Jzy023NIpDxa0P3uurUbgz40pe/Vqn1QOwS+vvTT6pcRsEDbH2tvw7aq5q2CsTpJ5/a/LurTm0gcZg4y0PBRYiqsLvZWW01g2Y9jyP7z3emuQmhp4TXVpcdVaq3zqHMRhW3S6F6uaZQxrOXJz11W/vLO6Y5/xi/pjrMsIL6vayY4GEo8+Fr+aO/rEeaxwWcqcHunKRSbC5HKD/16c8Vsq0uS1qe8xF3B/Hv62scGXdT0zwuAK/l9On6jB+hNKc90HVJUxNHK7SSRY+Pkhf7/Q/6qYgQrzumqSKYnGnHxFMdlOr41fLGWURUgatKMBEGrFkWKXmxYxHeh3imNc3jApJdaAZSMUz2oLW8LsVBY02SR8GK5mscGdebTTvDGmOXVTm0lhhbxi2mrxnCohRZiS05g4lxm69NGXf/5s6Jg3Qmg1IpZVCJigFoMTHp85a3zson3ftRq5JrcpWiZ3x4O/2R4iaj4RheESpVUwd3d2yzirdaobuEyQVcGJNW2M5LfFJCw43ktIJti6dK3uOZVKVr6mANCw+ywXgTred73nupfOd7P/RSNDkLRY0jW30TJvHumCLF2+ViddkYUKuqcwhoHFLAD/mAWydDENCCFt2KFrX8MTPge150gTj6iWLGtRpuCEWpVSD7YWIIb8nu0WUb4UQ3N+8WS9N+TVRuKCqQZZ+gS0NNINFaXen5kW+4y4777EWMn/CGP4fXhIDipEbdqqVh+ePmG6+XItRtu1ySmkCidfC9txOtX5qHoUYtqJuxxawtgvl75YeNfcIYu4hT+sntcnVU6UmdlsfdHbhI8GzJOq2NnSygvlFVDqZPSk0glzO40HcqujQJ3L2zPHmysqJrIqOIlqosRc6yoiaQWV2MvidmsryDa5tZLKK1YguphM8K2klXeZ4oynI9zNfGbl98bqMbRV23yyWpGkOezeDZi2ghfZ459B3wpGWFF2OegazrdrkkVYHM6oeP6XsfM7j4O7IKpNZnV+Q5jqzrdrkkVRsDsuyy4XQ+1jkR+gfcMsYoVdbi40NoZS/f2A+bFa1rb/GumTx2MPVvl6sjVYHMeoYN4785F8qrN1o5XGjoJvcHE1+HA7F5bqPDWqdW+Llk2VWHOm+XS1IVyHgSIa8ta+tFgnXswNE8u4jXlnUg67xdLkndxoA0O2vK6j7l5zfzWBus83a5JHWB1Ho0Kkvan2USde0z/JnUfbtcksqtc3V4lnxMe+sYy3IbXd03AySpDCQmOOrwQ4rrApVBlksSdd8ul8SH7RSoTOUsfT2MZxC2kBeoftgOCldVFUqJlGnc5PNhPEncLreV6uNXuHN+sYItJcbIZZxNzmJpgtvltlJ/HjIuilyFuyhuLGj1y/qE6Cx20nC73FalOKCMrhJCqXk3y24WNw44l3kBHN1L370VbpfbqjQVAzCmRPf17e84UKpJAFzAGC9WpZX3OSPK7XLbla6EB4KJi/uDylvMuLrA2995oFK7j3zeDLldbrvSloGMq8NhPIYCVNhrqeGBNbhgcaE98ODDlbz7+2whuV1uu9LXZU1WhosLH6OeKB4Umkfpxng5ACHExVr1KXxfBwC4XW4wM7V3xkpF4TTHgY2K5HNz+2V2//7ocwjuuMWvcAGh7s8S1s3OuZvA8rnoghp0fItoUpUO5CjiYKJkZLKk/gpq/GwU3kIQGTrKQ+0DSaRJpQslE5UNA0mkCANJpAgDSaQIA0mkCANJpAgDSaQIA0mkCANJpAgDSaQIA0mkCANJpAgDSaQIA0mkCANJpAgDSaQIA0mkCANJpAgDSaQIA0mkCANJpAgDSaQIA0mkCANJpAgDSaQIA0mkCANJpAgDSaQIA0mkCANJpAgDSaQIA0mkCANJpAgDSaQIA0mkCANJpEggVtpCRMVzWQysYSCJNEAWAyOyLERUOGQxMNYuCxEVL+qysoUkUsIuBdYGZ4WICmd7LpDNhiwIERUuCBpnDT6Y2jPzkhtRtoSIiuHGj93VlYvXNwYYtpJEBVvAf6JAGrELQkSFsTY8gfdRIBsmOClEVJheo7GI91EgO532sgi7rUSFsLIk6xlMbC437LYSFcEYe+/mx5ufbbVaU6/bl4SIctU15pLtLWS7jU3mC0JE+bFyIg4jbD0PaczPhIjyE/ZuTf7S9P/+1N6ZJ9y7eSGiTGEfee/8yiXJz22vGMBWkigfYXht/6fMoK9jK0mUrUGtIwyuqcNWkihTQdg9NvDzgz7Z7bQXrL2wNkJE/iBba2uvnhn0e2bon8K65Gv2BZ4CIfIn6qoacyS51JE0vAykW5e0Yr4gROQPJnKGhBEaO/1Z2+v8I5ja61pI834hopTsrb3Vl3+501cY2Y3rujZet8+6L5wTIppI1FXdZ969sSNuqN0rl7u/IOrzsqAy0UQ2x427hBFGe5SA6/May1ASjcu6zPRCc8VO48akhowoDDsvNpr7/uM+PCZENJIgCL8Srv7v8VG/fuRAQtjtLLlQomwkQylEOzMmPL7Wefm+cf7MWIGEzVBamXdTQtNCRFugm4qWcdwwwu6zrEM0m61DYWAf5ewr0QXRmBHzLWvtJZnAxIGMTLfmGtY+wVAS7b4LZxTpHtjq/sfR2opb8BSiWnOL/shCijDC2GPIbTqdTtg7/7gJ3LjSyCHXWnLvK9WGjZYCzWd6qyu3IQuSUvpAbrBhZ8k295001raMMYeEqOJwaqN3UfBR++pk48VB0o0hh2i+wU34dDnhQ5W1IL3etd3uK4viWSaBjDWareMS2GsYTKqIzIIYyzSQsanpNx6WsPFt93/jhgIqo8yDGMslkJvcMknQC48GgTnufsVxJmm24AaJC92LgttG2RTuS76BTMIaZk/mjbFH3fqNe8/ZWSoOZktdGBZCF8I9jdUTbsK0kCeLFxfIPtHOH9ObNYIZWvfmAmox9rTSYljJh2iJwkTBW3arActYyHczpcvNxtpCUQHs939MlyKV+YI7ngAAAABJRU5ErkJggg==" alt="Slot Master logo" />
+      <div class="title-wrap">
+        <div class="title-main">
+          <div class="title-line">
+            <h1>Slot Master</h1>
+            <span class="version-badge">v13.25</span>
+          </div>
+          <div id="authorLine" class="author-line"></div>
+        </div>
+      </div>
+      <div class="hero-spacer"></div>
+      <div class="toolbar-actions">
+        <button class="icon-btn" type="button" title="Theme">☼</button>
+        <button id="helpBtn" class="icon-btn" type="button" title="Help">?</button>
+      </div>
+      <div class="lang-switch" aria-label="Language">
+        <button id="langRu" class="lang-btn active" type="button">RU</button>
+        <button id="langEn" class="lang-btn" type="button">EN</button>
+      </div>
+    </div>
+    <div id="heroSub" class="sub"></div>
+
+    <div class="tabs">
+      <button id="tabRenameBtn" class="tab-btn active" type="button"><span class="tab-ico">▦</span><span id="tabRenameLabel"></span></button>
+      <button id="tabNormalizeBtn" class="tab-btn" type="button"><span class="tab-ico">T</span><span id="tabNormalizeLabel"></span></button>
+      <button id="tabAutofitBtn" class="tab-btn" type="button"><span class="tab-ico">T↔</span><span id="tabAutofitLabel"></span></button>
+      <button id="tabStylesBtn" class="tab-btn" type="button"><span class="tab-ico">◐</span><span id="tabStylesLabel"></span></button>
+      <button id="tabSortBtn" class="tab-btn" type="button"><span class="tab-ico">↕</span><span id="tabSortLabel"></span></button>
+      <button id="tabReportsBtn" class="tab-btn" type="button"><span class="tab-ico">⚠</span><span id="tabReportsLabel"></span></button>
+    </div>
+  </div>
+  <div class="content">
+
+
+  <div id="workspaceStatusStrip" class="workspace-strip minimal-status-row">
+    <div id="minimalStatus" class="minimal-status"></div>
+    <div class="workspace-spacer"></div>
+    <div id="operationHint" class="panel-note"></div>
+  </div>
+
+  <div id="sharedReferenceCard" class="shared-reference-card empty" style="display:none">
+    <div class="shared-reference-preview">
+      <img id="sharedReferenceImage" alt="" />
+      <div id="sharedReferencePlaceholder" class="shared-reference-placeholder">□</div>
+
+      <button
+        id="clearSharedReference"
+        class="shared-reference-clear"
+        type="button"
+        aria-label="Clear reference"
+        title="Clear reference"
+        disabled
+      >×</button>
+    </div>
+
+    <div class="shared-reference-copy">
+      <div class="shared-reference-eyebrow" id="sharedReferenceLabel"></div>
+      <div id="sharedReferenceName" class="shared-reference-name"></div>
+      <div id="sharedReferenceMeta" class="shared-reference-meta"></div>
+      <div id="sharedReferenceStatus" class="shared-reference-status"></div>
+    </div>
+
+    <div class="shared-reference-actions">
+      <button id="setSharedReference" class="primary"></button>
+      <button id="locateSharedReference" disabled></button>
+    </div>
+  </div>
+
+  <div id="tab-rename" class="tab-panel active">
+  <div class="box compact-box">
+    <div id="selectLabel" class="label"></div>
+    <div id="selection"></div>
+  </div>
+
+  <div class="box compact-box">
+    <div id="pasteLabel" class="label"></div>
+    <textarea id="input" placeholder="title	enabled	category	identifier	provider
+Gold Magnate	1	slots	bgmng:GoldMagnate	bgmng"></textarea>
+    <div id="pasteHint" class="hint"></div>
+
+    <div class="rename-sort-settings" style="margin-top:12px">
+      <div class="field">
+        <label id="tableTitleColumnLabel"></label>
+        <input id="tableTitleColumn" type="number" value="0" min="0" max="100">
+      </div>
+      <div class="field">
+        <label id="tableIdentifierColumnLabel"></label>
+        <input id="tableIdentifierColumn" type="number" value="0" min="0" max="100">
+      </div>
+      <div class="field">
+        <label id="tableColumnModeLabel"></label>
+        <input id="tableColumnMode" type="text" disabled
+          style="width:100%;height:38px;border:1px solid var(--line);border-radius:12px;padding:0 10px;background:#fafafa;color:var(--muted);">
+      </div>
+    </div>
+
+    <div id="tableColumnsHint" class="hint" style="margin-top:6px"></div>
+    <div id="preview" style="margin-top:8px"></div>
+  </div>
+
+  <div class="row">
+    <button id="rename" class="primary primary-lg" disabled></button>
+  </div>
+
+  <div class="sync-card">
+    <div class="sync-head">
+      <div>
+        <div id="fullSyncTitle" class="sync-title"></div>
+        <div id="fullSyncDesc" class="sync-desc"></div>
+      </div>
+    </div>
+
+    <div class="row">
+      <button id="runFullSync" class="primary" disabled></button>
+      <button id="applyFullSync" disabled></button>
+      <button id="resetSyncAliases"></button>
+    </div>
+
+    <div id="fullSyncThresholdHint" class="hint" style="margin-top:8px"></div>
+    <div id="fullSyncStatus"></div>
+  </div>
+
+  <div class="sync-card">
+    <div class="sync-head">
+      <div>
+        <div id="generatorTitle" class="sync-title"></div>
+        <div id="generatorDesc" class="sync-desc"></div>
+      </div>
+    </div>
+
+    <div class="rename-sort-settings" style="margin-top:12px">
+      <div class="field">
+        <label id="generatorColumnsLabel"></label>
+        <input id="generatorColumns" type="number" value="8" min="1" max="100">
+      </div>
+      <div class="field">
+        <label id="generatorGapLabel"></label>
+        <input id="generatorGap" type="number" value="24" min="0" max="2000">
+      </div>
+    </div>
+
+    <div id="generatorHint" class="hint" style="margin-top:8px"></div>
+
+    <div class="row" style="margin-top:10px">
+      <button id="generateFromTable" class="primary primary-lg" disabled></button>
+    </div>
+
+    <div id="generatorStatus" style="margin-top:8px"></div>
+  </div>
+
+
+
+  </div>
+
+
+  <div id="tab-sort" class="tab-panel">
+  <div class="rename-sort-card">
+    <div class="rename-sort-copy">
+      <div id="sortFramesTitle" class="rename-sort-title"></div>
+      <div id="sortFramesDesc" class="rename-sort-desc"></div>
+    </div>
+
+    <div class="rename-sort-settings">
+      <div class="field">
+        <label id="sortOrderLabel"></label>
+        <select id="sortOrder">
+          <option id="sortOrderAlphaOption" value="alpha">A–Z</option>
+          <option id="sortOrderTableOption" value="table">Table</option>
+        </select>
+      </div>
+      <div class="field">
+        <label id="sortChunkColsLabel"></label>
+        <input id="sortChunkCols" type="number" value="10" min="1" max="100">
+      </div>
+      <div class="field">
+        <label id="sortChunkRowsLabel"></label>
+        <input id="sortChunkRows" type="number" value="10" min="1" max="100">
+      </div>
+      <div class="field">
+        <label id="sortCardGapLabel"></label>
+        <input id="sortCardGap" type="number" value="24" min="0" max="1000">
+      </div>
+      <div class="field">
+        <label id="sortChunkGapLabel"></label>
+        <input id="sortChunkGap" type="number" value="500" min="0" max="5000">
+      </div>
+      <div class="field">
+        <label id="sortChunksPerRowLabel"></label>
+        <input id="sortChunksPerRow" type="number" value="5" min="1" max="100">
+      </div>
+    </div>
+
+    <div class="rename-sort-actions sort-actions-left">
+      <button id="sortFramesAlpha" class="primary" disabled></button>
+    </div>
+  </div>
+  <div id="sortFramesStatus" class="hint" style="margin-top:8px"></div>
+  </div>
+
+  <div id="tab-normalize" class="tab-panel">
+  <div class="section-card">
+    <div class="step-head">
+      <div class="step-badge normalize-gear-badge">⚙</div>
+      <div class="step-title" id="normalizeStep2Title"></div>
+    </div>
+    <p class="step-desc" id="normalizeStep2Desc"></p>
+
+    <button id="selectAllText" type="button" style="display:none"></button>
+    <div id="selectTextStatus" class="hint" style="display:none;margin:8px 0 0 38px"></div>
+
+    <details class="advanced" style="margin-left:38px">
+      <summary id="normalizeAdvancedLabel"></summary>
+      <div class="advanced-body">
+        <div class="checks" style="margin-top:0">
+          <label><input id="copyFont" type="checkbox" checked><span id="copyFontLabel"></span></label>
+          <label><input id="copyLetterSpacing" type="checkbox" checked><span id="copyLetterSpacingLabel"></span></label>
+          <label><input id="copyGap" type="checkbox" checked><span id="copyGapLabel"></span></label>
+          <label><input id="copyFrameSize" type="checkbox" checked><span id="copyFrameSizeLabel"></span></label>
+          <label><input id="alignCenter" type="checkbox" checked><span id="alignCenterLabel"></span></label>
+          <label><input id="alignBottom" type="checkbox" checked><span id="alignBottomLabel"></span></label>
+        </div>
+        <div id="normalizeNote" class="note"></div>
+      </div>
+    </details>
+
+    <div class="row" style="margin:14px 0 0 38px">
+      <button id="applyNormalize" class="primary primary-lg" disabled></button>
+    </div>
+
+    <div id="normalizeStatus" style="margin:10px 0 0 38px"></div>
+  </div>
+
+  <div id="normalizeRef" style="display:none"></div>
+  <button id="setReference" type="button" style="display:none"></button>
+  <div id="normalizeTitle" style="display:none"></div>
+  <div id="normalizeHint" style="display:none"></div>
+
+
+
+
+  </div>
+
+  <div id="tab-autofit" class="tab-panel">
+    <div style="display:none">
+      <button id="setTitleFitTemplate" type="button"></button>
+      <div id="titleFitTemplateTitle"></div>
+      <div id="titleFitTemplateHint"></div>
+      <div id="titleFitTemplateCard" class="empty">
+        <div id="titleFitTemplateState"></div>
+        <div id="titleFitTemplateMeta"></div>
+      </div>
+    </div>
+
+    <div class="titlefit-panel">
+      <div class="titlefit-head">
+        <div>
+          <div id="titleFitHeading" class="titlefit-heading"></div>
+          <div id="titleFitLead" class="titlefit-lead"></div>
+        </div>
+      </div>
+
+      <div class="titlefit-step">
+        <div class="titlefit-step-index">1</div>
+        <div class="titlefit-step-body">
+          <div id="titleFitSettingsTitle" class="titlefit-step-title"></div>
+
+          <div class="titlefit-grid">
+            <div class="field">
+              <label id="titleFitGapLabel"></label>
+              <input id="titleFitGap" type="number" value="0" min="0" max="40" step="0.5">
+            </div>
+            <div class="field">
+              <label id="titleFitPaddingLabel"></label>
+              <input id="titleFitPadding" type="number" value="12" min="0" max="200">
+            </div>
+            <div class="field">
+              <label id="titleFitMinLabel"></label>
+              <input id="titleFitMin" type="number" value="16" min="1" max="200">
+            </div>
+            <div class="field">
+              <label id="titleFitMaxLabel"></label>
+              <input id="titleFitMax" type="number" value="48" min="1" max="300">
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="titlefit-divider"></div>
+
+      <div class="titlefit-step">
+        <div class="titlefit-step-index">2</div>
+        <div class="titlefit-step-body">
+          <div id="titleFitApplyTitle" class="titlefit-step-title"></div>
+          <div id="titleFitApplyHint" class="titlefit-step-hint"></div>
+
+          <div class="row">
+            <button id="previewTitleFit" disabled></button>
+            <button id="applyTitleFit" class="primary primary-lg" disabled></button>
+          </div>
+
+          <div id="titleFitStatus" style="margin-top:10px"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="tab-styles" class="tab-panel">
+    <div class="section-card">
+      <div class="step-head">
+        <div class="step-badge">◐</div>
+        <div class="step-title-row">
+          <div class="step-title" id="gradientTitle"></div>
+          <span
+            id="gradientInfoTip"
+            class="info-tip"
+            tabindex="0"
+            role="button"
+            aria-label="Info"
+          >
+            i
+            <span id="gradientInfoTooltip" class="info-tip-tooltip"></span>
+          </span>
+        </div>
+      </div>
+      <div id="gradientDesc" style="display:none"></div>
+
+      <div class="autofit-grid" style="grid-template-columns:2fr 1fr">
+        <div class="field">
+          <label id="gradientPrefixLabel"></label>
+          <input id="gradientPrefix" type="text" value="gradient/slots"
+            style="width:100%;height:38px;border:1px solid var(--line);border-radius:12px;padding:0 10px;background:#fff;color:var(--text);outline:none;">
+        </div>
+        <div class="field">
+          <label id="gradientDistributionLabel"></label>
+          <input id="gradientDistributionDisplay" type="text" value="Balanced random" disabled
+            style="width:100%;height:38px;border:1px solid var(--line);border-radius:12px;padding:0 10px;background:#fafafa;color:var(--muted);">
+        </div>
+      </div>
+
+      <div class="checks">
+        <label>
+          <input id="gradientAvoidSame" type="checkbox" checked>
+          <span id="gradientAvoidSameLabel"></span>
+        </label>
+      </div>
+
+      <div id="gradientNote" style="display:none"></div>
+
+      <div class="row">
+        <button id="scanGradients"></button>
+        <button id="randomizeGradients" disabled></button>
+      </div>
+
+      <div style="height:1px;background:var(--line);margin:16px 0"></div>
+
+      <div class="step-title-row auto-gradient-title-row">
+        <span class="magic-wand-icon" aria-hidden="true">
+          <svg viewBox="0 0 20 20" width="18" height="18" fill="none">
+            <path d="M5.6 14.4L14.1 5.9" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/>
+            <path d="M12.7 4.5L15.5 7.3" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/>
+            <path d="M4.2 4.2V6.7M2.95 5.45H5.45" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
+            <path d="M15.6 12.8V15.2M14.4 14H16.8" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
+            <path d="M9.2 2.6V4.4M8.3 3.5H10.1" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/>
+          </svg>
+        </span>
+
+        <div class="step-title" id="gradientAutoTitle"></div>
+
+        <span
+          id="gradientAutoInfoTip"
+          class="info-tip"
+          tabindex="0"
+          role="button"
+          aria-label="Info"
+        >
+          i
+          <span id="gradientAutoInfoTooltip" class="info-tip-tooltip"></span>
+        </span>
+      </div>
+      <div id="gradientAutoDesc" style="display:none"></div>
+
+      <div class="autofit-grid" style="grid-template-columns:1fr 2fr">
+        <div class="field">
+          <label id="gradientAnalyzeTopLabel"></label>
+          <input id="gradientAnalyzeTop" type="number" value="70" min="35" max="95" step="5">
+        </div>
+        <div class="field">
+          <label id="gradientAutoModeLabel"></label>
+          <input id="gradientAutoModeDisplay" type="text" disabled
+            style="width:100%;height:38px;border:1px solid var(--line);border-radius:12px;padding:0 10px;background:#fafafa;color:var(--muted);">
+        </div>
+      </div>
+
+      <div id="gradientAutoNote" style="display:none"></div>
+
+      <div class="row">
+        <button id="autoMatchGradients" class="primary primary-lg" disabled></button>
+      </div>
+
+      <div id="gradientStatus" style="margin-top:10px"></div>
+    </div>
+  </div>
+
+  <div id="tab-reports" class="tab-panel">
+    <div class="box">
+      <div id="reportsLabel" class="label"></div>
+      <div id="reportsHint" class="panel-note"></div>
+      <div id="status"><div class="empty-report"><div class="big">✓</div><div id="emptyReportsText"></div></div></div>
+    </div>
+  </div>
+
+  <div id="operationBar" class="operation-bar">
+    <div class="operation-spinner"></div>
+    <div class="operation-copy">
+      <div id="operationBarTitle" class="operation-title"></div>
+      <div id="operationBarSub" class="operation-sub"></div>
+    </div>
+    <button id="stopOperation" class="stop-compact" type="button"></button>
+  </div>
+
+<script>
+const input = document.getElementById('input');
+const selectionEl = document.getElementById('selection');
+const preview = document.getElementById('preview');
+const status = document.getElementById('status');
+let skippedIds = [];
+let extraIds = [];
+let duplicateIds = [];
+let sharedIdentifierCardIds = [];
+
+let currentLang = 'ru';
+let languageTouched = false;
+let languageLoadedFromLocalStorage = false;
+let lastSelectionInfo = { count: 0, frameCount: 0, names: [] };
+let lastFullSyncResult = null;
+let normalizeReferenceData = null;
+let sharedReferenceData = null;
+let sharedReferencePreviewUrl = null;
+let titleFitPreviewUrls = [];
+let titleFitTemplateSummary = null;
+let fullSyncSessionId = null;
+let fullSyncReviewState = new Map();
+
+
+const I18N = {
+  ru: {
+    heroSub: 'Массовая синхронизация и подготовка слот-карточек в Figma.',
+    authorLine: 'by Alexey Kylik',
+    sharedReferenceLabel: 'Единый референс',
+    sharedReferenceEmpty: 'Референс не задан',
+    sharedReferenceEmptyMeta: 'Один референс для Normalize и Title Fit.',
+    sharedReferenceSet: 'Использовать выделенную',
+    sharedReferenceChange: 'Изменить референс',
+    sharedReferenceLocate: 'Показать в Figma',
+    sharedReferenceClear: 'Отменить референс',
+    tabRename: 'Rename',
+    tabSort: 'Sort',
+    tabNormalize: 'Normalize',
+    tabAutofit: 'Title Fit',
+    titleFitHeading: 'Title Fit',
+    titleFitLead: 'Подбирает 1–3 строки и размер текста по единому референсу.',
+    titleFitTemplateTitle: 'Единый референс',
+    titleFitTemplateHint: 'Title Fit автоматически использует типографику, позицию и интервалы из единого референса. Кнопка ниже меняет общий референс для всех инструментов.',
+    titleFitSetTemplate: 'Взять как шаблон',
+    titleFitTemplateEmpty: 'Шаблон ещё не задан',
+    titleFitTemplateReady: 'Шаблон сохранён',
+    titleFitSettingsTitle: 'Параметры подгонки',
+    titleFitGap: 'Gap между строками, px',
+    titleFitPadding: 'Padding, px',
+    titleFitMin: 'Min font',
+    titleFitMax: 'Max font',
+    titleFitApplyTitle: 'Применить к выбранным',
+    titleFitApplyHint: 'Выдели карточки или их заголовки.',
+    titleFitPreview: 'Проверить',
+    titleFitApply: 'Применить',
+    titleFitPreviewReady: 'Предпросмотр',
+    titleFitPreviewPreparing: 'Готовим превью',
+    titleFitProgress: 'Обработка',
+    titleFitProcessed: 'Обработано',
+    titleFitSkipped: 'Пропущено',
+    titleFitTemplateRequired: 'Сначала задай шаблон.',
+    tabStyles: 'Styles',
+    tabReports: 'Report',
+    gradientTitle: 'Случайные градиенты',
+    gradientDesc: 'Распределяет локальные Paint Styles из выбранной группы по выделенным карточкам.',
+    gradientPrefix: 'Группа стилей',
+    gradientDistribution: 'Распределение',
+    gradientDistributionValue: 'Сбалансированный random',
+    gradientAvoidSame: 'Не оставлять текущий градиент, если есть другой',
+    gradientNote: 'Поддерживается структура Gradient → Rectangle. Если Gradient — это компонент или инстанс, плагин проваливается внутрь и применяет Paint Style непосредственно к вложенному Rectangle, а не к самому компоненту. Стили распределяются сбалансированно.',
+    scanGradients: 'Найти стили',
+    randomizeGradients: 'Распределить случайно',
+    gradientFound: 'Найдено стилей',
+    gradientApplied: 'Применено к карточкам',
+    gradientSkipped: 'Пропущено карточек',
+    gradientAutoTitle: 'Автоградиент по цвету баннера',
+    gradientAutoDesc: 'Анализирует цвет арта каждой выделенной карточки и подбирает ближайший существующий gradient style.',
+    gradientAnalyzeTop: 'Анализировать верх, %',
+    gradientAutoMode: 'Подбор',
+    gradientAutoModeValue: 'Ближайший цвет существующего градиента',
+    gradientAutoNote: 'Плагин анализирует верхнюю часть арта, игнорирует почти белые, серые и чёрные пиксели, определяет доминирующий насыщенный цвет и подбирает ближайший Paint Style из выбранной группы.',
+    gradientAutoApply: 'Подобрать градиенты по цвету',
+    gradientAutoColor: 'Определённый цвет',
+    gradientNoCards: 'Сначала выдели карточки.',
+    gradientNoStyles: 'В этой группе не найдено локальных Paint Styles.',
+    reportsLabel: 'Отчёты',
+    reportsHint: 'Здесь отображаются результаты переименования, списки Missing/Skipped и сводка по последнему запуску.',
+    stopOperation: 'Остановить текущую операцию',
+    stopRequested: 'Останавливаю… текущая карточка может завершиться',
+    operationIdle: '',
+    selectedChip: 'Выбрано',
+    tableChip: 'Таблица',
+    rowsChip: 'игр',
+    rowCountLabel: 'строк',
+    titleFitRowsLabel: 'Строки',
+    titleFitGapLabelShort: 'Gap',
+    sortChunksLabel: 'Кучек',
+    skippedCardsLabel: 'пропущено карточек',
+    normalizeStep1Title: 'Единый референс',
+    normalizeStep1Desc: 'Normalize использует тот же единый референс, что Create и Title Fit. При необходимости его можно заменить здесь.',
+    normalizeStep2Title: 'Настройки',
+    normalizeStep2Desc: 'Настрой параметры и примени их к выбранным карточкам или заголовкам.',
+    advancedSettings: 'Дополнительные настройки',
+    quickTab: 'Smart Fit',
+    breaksTab: 'Структура',
+    fitTab: 'Размеры',
+    quickFitTitle: 'Создать / обновить title',
+    quickFitDesc: 'Выдели карточку или её старый заголовок. Один Text Layer разбивается ровно на указанное количество строк, каждая строка становится отдельным Text Layer и пакуется в Auto Layout `title`.',
+    quickMeta1: '1 Text Layer → N строк',
+    quickMeta2: 'строка N · отдельный Text',
+    quickMeta3: 'Cap height → Baseline + Gap',
+    quickGap: 'Gap между строками',
+    quickFitButton: 'Создать / обновить title',
+    titleStructureTitle: 'Структура заголовка',
+    titleStructureHint: 'Базовая логика: один старый Text Layer → ровно указанное количество отдельных строк → Vertical Auto Layout `title`. При значении 3 создаются 3 строки, если в названии минимум 3 слова.',
+    autoLayoutConverted: 'Собрано в Auto Layout',
+    autoLayoutSkipped: 'Пропущено карточек',
+    resolvedSelection: 'Определено карточек из выделения',
+    nestedInstanceConverted: 'Заголовков перенесено из вложенных Instance',
+    emptyReports: 'Запусти Rename — здесь появятся Missing, Skipped и итоговая сводка.',
+    runningSub: 'Можно продолжать работать с интерфейсом или остановить процесс.',
+    stoppedEarly: 'Остановлено раньше времени.',
+    selectLabel: '1. Выдели карточки в Figma',
+    pasteLabel: '2. Вставь таблицу',
+    pasteHint: 'Можно вставлять диапазон напрямую из Google Sheets.',
+    tableTitleColumn: 'Колонка Title',
+    tableIdentifierColumn: 'Колонка Identifier',
+    tableColumnMode: 'Режим колонок',
+    tableColumnAuto: 'Авто',
+    tableColumnManual: 'По номерам колонок',
+    tableColumnsHint: '0 = авто. Каждая строка считается отдельной карточкой. Identifier берётся как точное значение ячейки: цифры в Title и Identifier не сравниваются и не исправляются.',
+    tableColumnsDetected: 'Колонки',
+    selectAllText: 'Выделить заголовки',
+    selectTextDone: 'Выделено заголовков',
+    selectTextNoCards: 'Сначала выдели одну или несколько карточек.',
+    selectTextNone: 'В выбранных карточках не удалось определить заголовки игр.',
+    rename: 'Переименовать и показать пропущенные',
+    fullSyncTitle: 'Full Sync',
+    fullSyncOneToOneOk: 'Количество совпадает. Это только проверка, а не критерий сопоставления.',
+    fullSyncNeedCreate: 'В таблице строк больше на',
+    fullSyncNeedRemove: 'В Figma карточек больше на',
+    fullSyncOneToOneRule: 'Сопоставление идёт по Identifier + Title + существующим карточкам. Разница количества используется только как диагностика.',
+    fullSyncAssignedRows: 'Строк сопоставлено',
+    fullSyncStatusOk: 'Синхронизация корректна',
+    fullSyncStatusReview: 'Нужна проверка соответствий',
+    fullSyncCountDifference: 'Разница количества',
+    fullSyncDesc: 'Сопоставляет таблицу и Figma: exact → aliases → безопасный fuzzy match.',
+    fullSyncRun: 'Запустить Full Sync',
+    fullSyncApply: 'Применить синхронизацию',
+    fullSyncResetAliases: 'Сбросить aliases',
+    fullSyncThresholdHint: '≥95% — автосопоставление · 75–94% — требуется проверка · ниже 75% — не связывается автоматически.',
+    fullSyncSafe: 'Exact',
+    fullSyncAuto: 'Auto',
+    fullSyncReview: 'Проверить',
+    fullSyncMissing: 'Missing',
+    fullSyncDuplicates: 'Дубликаты',
+    fullSyncExtras: 'Extra',
+    fullSyncKnownAliases: 'Сохранённых aliases',
+    fullSyncReviewTitle: 'Возможные совпадения',
+    fullSyncConfirm: 'Подтвердить',
+    fullSyncReject: 'Не совпадает',
+    fullSyncConfirmed: 'Подтверждено',
+    fullSyncRejected: 'Отклонено',
+    fullSyncTable: 'TABLE',
+    fullSyncFigma: 'FIGMA',
+    fullSyncMissingTitle: 'Реально не найдено в Figma',
+    fullSyncCreateMissingAll: 'Создать все Missing',
+    fullSyncCreateMissingOne: 'Создать карточку',
+    fullSyncCreateMissingBase: 'База',
+    fullSyncCreateMissingHint: 'Карточки создаются из крайнего выбранного баннера. Title и Identifier берутся из соответствующей строки таблицы.',
+    fullSyncCreateMissingNoBase: 'Не найден баннер-база. Выдели карточки и снова запусти Full Sync.',
+    fullSyncCreateMissingProgress: 'Создаю Missing',
+    fullSyncCreateMissingDone: 'Missing-карточки созданы',
+    fullSyncCloneSuggested: 'Нужен дубликат этого Identifier',
+    fullSyncCloneOne: 'Создать дубликат карточки',
+    fullSyncCloneAll: 'Создать все недостающие дубликаты',
+    fullSyncCloneCreated: 'Фрейм создан',
+    fullSyncCloneHint: 'Создание предлагается только после полного сопоставления: если один Identifier нужен нескольким строкам, но одной из этих строк не хватает отдельной подходящей карточки. Общая разница количества сама по себе ничего не создаёт.',
+    fullSyncCloneSource: 'Источник',
+    fullSyncExtraTitle: 'Карточки без подходящей строки таблицы',
+    fullSyncDuplicateTitle: 'Дубликаты',
+    fullSyncApplied: 'Имена фреймов обновлены',
+    fullSyncApplyHint: 'Применяются Exact, Auto, дубликаты и подтверждённые вручную совпадения.',
+    fullSyncAliasesReset: 'Aliases очищены.',
+    generatorTitle: 'Создать карточки по таблице',
+    generatorDesc: 'Создаёт одну карточку на каждую строку: Identifier → имя фрейма, Title → заголовок.',
+    generatorColumns: 'Столбцов',
+    generatorGap: 'Зазор между карточками, px',
+    generatorHint: 'Используется текущий единый референс. Он не входит в количество. Если в таблице 908 строк — будет создано 908 новых карточек.',
+    generatorRun: 'Создать карточки по таблице',
+    generatorCreating: 'Создаю карточки',
+    generatorDone: 'Карточки созданы',
+    generatorTitleFallbacks: 'Заголовков создано упрощённо',
+    generatorFailed: 'Не удалось создать',
+    generatorReference: 'Референс',
+    generatorStopped: 'Создание остановлено',
+    sortFramesTitle: 'Сортировка фреймов',
+    sortFramesDesc: 'Сортирует карточки и раскладывает их по заданной сетке.',
+    sortFramesButton: 'Сортировать и собрать',
+    sortOrderLabel: 'Порядок',
+    sortOrderAlpha: 'По алфавиту A–Z',
+    sortOrderTable: 'По порядку таблицы',
+    sortChunkColsLabel: 'Столбцов в кучке',
+    sortChunkRowsLabel: 'Строк в кучке',
+    sortCardGapLabel: 'Зазор между карточками, px',
+    sortChunkGapLabel: 'Зазор между кучками, px',
+    sortChunksPerRowLabel: 'Кучек в ряд',
+    sortFramesNotInTable: 'Не найдено в таблице',
+    sortFramesTableRequired: 'Для сортировки по таблице сначала вставь таблицу выше.',
+    sortFramesDone: 'Отсортировано фреймов',
+    sortFramesGroups: 'Групп родителей',
+    normalizeTitle: 'Нормализация заголовков',
+    normalizeHint: 'Референс считывается из блока <b>title</b>. Шрифт применяется ко всем слоям «строка N», размеры каждой строки сохраняются, а позиция и Gap берутся с Auto Layout.',
+    referenceNotSet: 'Референс: не задан',
+    reference: 'Референс',
+    copyFont: 'Копировать шрифт и начертание',
+    copyLetterSpacing: 'Копировать межбуквенный интервал',
+    copyGap: 'Копировать Gap Auto Layout',
+    copyFrameSize: 'Скейлить фрейм как референс',
+    alignCenter: 'По центру родительского фрейма',
+    alignBottom: 'Повторить нижнюю позицию',
+    normalizeNote: '<b>Размер каждой строки сохраняется отдельно.</b> Normalize также приводит каждую строку к Cap height → Baseline.',
+    setReference: 'Задать референс',
+    applyNormalize: 'Применить к выбранным',
+    smartBreakTitle: 'Пересобрать строки',
+    smartBreakHint: 'Пересчитывает распределение слов и заново создаёт ровно указанное количество слоёв `строка N` внутри `title`.',
+    smartLines: 'Количество строк',
+    smartPadding: 'Боковой отступ %',
+    smartMode: 'Режим',
+    smartModeValue: 'Баланс',
+    smartLineHeight: 'Line-height, %',
+    smartProportionalLH: 'Пропорциональный line-height для всех строк',
+    smartPreserveBottom: 'Сохранять нижнюю позицию',
+    smartAutoFitAfter: 'Запустить Auto Fit после переносов',
+    smartBreakNote: 'Используй эту кнопку, когда нужно изменить само распределение слов по строкам. Существующая ручная разбивка будет заменена.',
+    smartBreakButton: 'Пересобрать строки в title',
+    smartBreaking: 'Подбираю переносы…',
+    smartBroken: 'заголовков переразбито.',
+    smartBreakSkipped: 'Пропущено при Smart Line Breaks',
+    autoFitTitle: 'Подогнать размеры строк',
+    autoFitHint: 'Подгоняет размер каждого слоя «строка N» независимо. Структура и переносы не меняются.',
+    minFont: 'Мин. размер',
+    maxFont: 'Макс. размер',
+    sidePadding: 'Боковой отступ %',
+    preserveBottom: 'Сохранять нижнюю позицию заголовка',
+    autoLineHeight: 'Line-height, %',
+    autoProportionalLH: 'Пропорциональный line-height для всех строк',
+
+    autoFitNote: 'Каждой строке автоматически задаётся Cap height → Baseline. Межстрочный интервал контролируется только Gap родительского Auto Layout.',
+    autoFitButton: 'Подогнать строки выбранных',
+    selected: 'выбрано',
+    gamesDetected: 'Распознано игр',
+    nothingPasted: 'Ничего не вставлено.',
+    cannotRecognize: 'Не удалось распознать title + identifier.',
+    processing: 'Обработка…',
+    normalizing: 'Нормализация…',
+    autoFitting: 'Автоподгонка…',
+    referenceSaved: 'Референс сохранён. Теперь выдели целевые карточки.',
+    normalized: 'заголовков нормализовано.',
+    autoFitted: 'заголовков подогнано.',
+    skipped: 'пропущено.',
+    normalizeSkipped: 'Пропущено при нормализации',
+    autoFitSkipped: 'Пропущено при Auto Fit',
+    renamed: 'Сопоставлено строк',
+    actuallyRenamed: 'Имена фреймов обновлены',
+    reportTableRows: 'Строк в таблице',
+    reportSelectedCards: 'Карточек в Figma',
+    reportClaimedRows: 'Строк сопоставлено',
+    reportCountDifference: 'Разница количества',
+    skippedStat: 'Пропущено',
+    missingStat: 'Не хватает',
+    extraStat: 'Лишние',
+    duplicateStat: 'Дубликаты',
+    duplicateBanners: 'Дубликаты в Figma',
+    duplicateBannersHint: 'Физических карточек больше, чем доступных строк таблицы для этого совпадения.',
+    selectDuplicates: 'Выделить дубликаты в Figma',
+    sharedIdentifierTitle: 'Карточки с одинаковым Identifier',
+    sharedIdentifierHint: 'Каждая строка таблицы остаётся отдельной карточкой. Здесь показаны строки, где один и тот же identifier используется несколько раз — например Title отличается одной цифрой.',
+    sharedIdentifierExpected: 'Строк в таблице',
+    sharedIdentifierAssigned: 'Карточек найдено',
+    sharedIdentifierSelect: 'Выделить эту группу',
+    sharedIdentifierSelectAll: 'Выделить все такие карточки',
+    missingBanners: 'Отсутствующие баннеры',
+    extraBanners: 'Лишние баннеры в Figma',
+    extraBannersHint: 'Есть среди выделенных фреймов в Figma, но соответствующей игры нет в таблице.',
+    skippedFrames: 'Пропущенные фреймы',
+    selectExtras: 'Выделить лишние в Figma',
+    renamedFrames: 'Переименованные фреймы',
+    selectSkipped: 'Выделить пропущенные в Figma',
+    text: 'Текст',
+    backend: {
+      'No valid title + identifier rows.': 'Нет корректных строк title + identifier.',
+      'Select frames in Figma first.': 'Сначала выдели фреймы в Figma.',
+      'This banner exists in Figma but no matching game was found in the table.': 'Баннер есть в Figma, но соответствующей игры нет в таблице.',
+      'Old frame name matches more than one table row, so the plugin did not rename it automatically.': 'Старое имя фрейма подходит сразу к нескольким строкам таблицы, поэтому плагин не стал переименовывать его автоматически.',
+      'Old frame identifier payload matches more than one table row, so it was not renamed automatically.': 'Смысловая часть старого identifier совпала сразу с несколькими строками таблицы, поэтому плагин не стал переименовывать фрейм автоматически.',
+      'Select exactly ONE reference card.': 'Выдели ровно ОДНУ карточку-референс.',
+      'Could not identify the title inside this reference card.': 'Не удалось определить заголовок внутри карточки-референса.',
+      'Set a reference card first.': 'Сначала задай карточку-референс.',
+      'Set the shared reference first.': 'Сначала задай единый референс.',
+      'Select exactly one reference card before generating, or set the shared reference in Normalize / Title Fit.': 'Перед созданием выдели ровно одну референс-карточку или задай единый референс в Normalize / Title Fit.',
+      'Shared reference is no longer available. Set it again.': 'Единый референс больше недоступен. Задай его заново.',
+      'Reference card is no longer available. Set it again.': 'Карточка-референс больше недоступна. Задай её снова.',
+      'Could not find the game-title text inside the reference card.': 'Не удалось найти текст названия игры внутри референса.',
+      'Could not read reference card/title bounds.': 'Не удалось определить границы референса или заголовка.',
+      'Select target cards first.': 'Сначала выдели целевые карточки.',
+      'Title layer not found.': 'Слой заголовка не найден.',
+      'Could not read title bounds.': 'Не удалось определить границы заголовка.',
+      'Could not read title/card bounds.': 'Не удалось определить границы заголовка или карточки.',
+      'No title from the table matched text inside this frame.': 'Текст внутри фрейма не совпал ни с одним title из таблицы.',
+      'Smart Line Breaks requires the title to be in one Text Layer.': 'Smart Line Breaks работает только когда заголовок находится в одном Text Layer.',
+      'Could not measure title text.': 'Не удалось измерить ширину текста заголовка.',
+      'Could not calculate line breaks.': 'Не удалось рассчитать переносы строк.',
+      'Card is an Instance. Auto Layout structure cannot be added inside an Instance.': 'Карточка является Instance. Внутрь Instance нельзя добавить новую структуру Auto Layout.',
+      'Title is inside a nested Instance. Detach or restructure that nested instance first.': 'Заголовок находится внутри вложенного Instance. Сначала нужно изменить структуру этого Instance.',
+      'Could not calculate title lines.': 'Не удалось рассчитать строки заголовка.',
+      'Could not remove original title layer.': 'Не удалось удалить исходный слой заголовка.',
+      'Select one or more cards first.': 'Сначала выдели одну или несколько карточек.'
+    }
+  },
+  en: {
+    heroSub: 'A Figma tool for bulk slot-card synchronization, renaming, and preparation.',
+    authorLine: 'by Alexey Kylik',
+    sharedReferenceLabel: 'Shared reference',
+    sharedReferenceEmpty: 'Reference is not set',
+    sharedReferenceEmptyMeta: 'One reference for Normalize and Title Fit.',
+    sharedReferenceSet: 'Use selected',
+    sharedReferenceChange: 'Change reference',
+    sharedReferenceLocate: 'Show in Figma',
+    sharedReferenceClear: 'Clear reference',
+    tabRename: 'Rename',
+    tabSort: 'Sort',
+    tabNormalize: 'Normalize',
+    tabAutofit: 'Title Fit',
+    titleFitHeading: 'Title Fit',
+    titleFitLead: 'Title Fit automatically chooses the row count and each row size. A single word stays on one row and grows; any title with 2+ words uses at least 2 rows. Maximum: 3 rows.',
+    titleFitTemplateTitle: 'Shared reference',
+    titleFitTemplateHint: 'Title Fit automatically uses typography, placement, and spacing from the shared reference. The button below changes the shared reference for every tool.',
+    titleFitSetTemplate: 'Use as template',
+    titleFitTemplateEmpty: 'Template is not set',
+    titleFitTemplateReady: 'Template saved',
+    titleFitSettingsTitle: 'Fit parameters',
+    titleFitGap: 'Gap between rows, px',
+    titleFitPadding: 'Padding, px',
+    titleFitMin: 'Min font',
+    titleFitMax: 'Max font',
+    titleFitApplyTitle: 'Apply to selection',
+    titleFitApplyHint: 'You can select whole cards or only their title Text Layers.',
+    titleFitPreview: 'Preview',
+    titleFitApply: 'Apply',
+    titleFitPreviewReady: 'Preview',
+    titleFitPreviewPreparing: 'Preparing preview',
+    titleFitProgress: 'Processing',
+    titleFitProcessed: 'Processed',
+    titleFitSkipped: 'Skipped',
+    titleFitTemplateRequired: 'Set a template first.',
+    tabReports: 'Report',
+    tabStyles: 'Styles',
+    gradientTitle: 'Random gradients',
+    gradientDesc: 'Randomly distributes local Paint Styles across selected cards.',
+    gradientPrefix: 'Style group',
+    gradientDistribution: 'Distribution',
+    gradientDistributionValue: 'Balanced random',
+    gradientAvoidSame: 'Use a different gradient when possible',
+    gradientNote: 'Supports Gradient → Rectangle. For component/instance gradients, the Paint Style is applied to the nested Rectangle.',
+    scanGradients: 'Find styles',
+    randomizeGradients: 'Randomize',
+    gradientFound: 'Styles found',
+    gradientApplied: 'Cards updated',
+    gradientSkipped: 'Skipped',
+    gradientAutoTitle: 'Auto gradient by banner color',
+    gradientAutoDesc: 'Detects the dominant artwork color and selects the closest gradient style.',
+    gradientAnalyzeTop: 'Analyze top, %',
+    gradientAutoMode: 'Matching',
+    gradientAutoModeValue: 'Closest gradient color',
+    gradientAutoNote: 'Near-white, gray, and black pixels are ignored before the dominant saturated color is matched to the closest Paint Style.',
+    gradientAutoApply: 'Match gradients by color',
+    gradientAutoColor: 'Detected color',
+    gradientNoCards: 'Select cards first.',
+    gradientNoStyles: 'No local Paint Styles found in this group.',
+    reportsLabel: 'Reports',
+    reportsHint: 'This tab shows rename results, Missing/Skipped lists, and the latest operation summary.',
+    stopOperation: 'Stop current operation',
+    stopRequested: 'Stopping… the current card may finish first',
+    operationIdle: '',
+    selectedChip: 'Selected',
+    tableChip: 'Table',
+    rowsChip: 'games',
+    rowCountLabel: 'rows',
+    titleFitRowsLabel: 'Rows',
+    titleFitGapLabelShort: 'Gap',
+    sortChunksLabel: 'Chunks',
+    skippedCardsLabel: 'skipped cards',
+    normalizeStep1Title: 'Shared reference',
+    normalizeStep1Desc: 'Select the reference card or one of its title Text Layers — the plugin automatically resolves the owning card.',
+    normalizeStep2Title: 'Settings',
+    normalizeStep2Desc: 'Adjust settings, then apply them to selected cards or title layers.',
+    advancedSettings: 'Advanced settings',
+    quickTab: 'Smart Fit',
+    breaksTab: 'Structure',
+    fitTab: 'Sizing',
+    quickFitTitle: 'Create / update title',
+    quickFitDesc: 'Select a card or its legacy title. One Text Layer is split into exactly the requested number of rows; each row becomes a separate Text Layer packed into the `title` Auto Layout.',
+    quickMeta1: '1 Text Layer → N rows',
+    quickMeta2: 'row N · separate Text',
+    quickMeta3: 'Cap height → Baseline + Gap',
+    quickGap: 'Gap between lines',
+    quickFitButton: 'Create / update title',
+    titleStructureTitle: 'Title structure',
+    titleStructureHint: 'Base logic: one legacy Text Layer → exactly the requested number of separate rows → Vertical Auto Layout `title`. With 3 selected, 3 rows are created when the title has at least 3 words.',
+    autoLayoutConverted: 'Converted to Auto Layout',
+    autoLayoutSkipped: 'Cards skipped',
+    resolvedSelection: 'Cards resolved from selection',
+    nestedInstanceConverted: 'Titles migrated from nested Instances',
+    emptyReports: 'Run Rename to see Missing, Skipped, and the latest summary here.',
+    runningSub: 'You can keep using the UI or stop the operation.',
+    stoppedEarly: 'Stopped early.',
+    selectLabel: '1. Select cards in Figma',
+    pasteLabel: '2. Paste the table',
+    pasteHint: 'Paste any table range directly from Google Sheets.',
+    tableTitleColumn: 'Title column',
+    tableIdentifierColumn: 'Identifier column',
+    tableColumnMode: 'Column mode',
+    tableColumnAuto: 'Auto',
+    tableColumnManual: 'By column numbers',
+    tableColumnsHint: '0 = auto. Every row counts as a separate card. Identifier is treated as the exact cell value: numbers in Title and Identifier are not compared or corrected.',
+    tableColumnsDetected: 'Columns',
+    selectAllText: 'Select titles',
+    selectTextDone: 'Title layers selected',
+    selectTextNoCards: 'Select one or more cards first.',
+    selectTextNone: 'No game-title layers could be detected inside the selected cards.',
+    rename: 'Rename & Show skipped',
+    fullSyncTitle: 'Full Sync',
+    fullSyncOneToOneOk: 'Counts match. This is validation only, not a matching rule.',
+    fullSyncNeedCreate: 'Table has more rows by',
+    fullSyncNeedRemove: 'Figma has more cards by',
+    fullSyncOneToOneRule: 'Matching is based on Identifier + Title + existing cards. Count difference is diagnostic only.',
+    fullSyncAssignedRows: 'Rows assigned',
+    fullSyncStatusOk: 'Synchronization is consistent',
+    fullSyncStatusReview: 'Matching review required',
+    fullSyncCountDifference: 'Count difference',
+    fullSyncDesc: 'Reconciles the table with Figma even when names differ slightly. Safe matching runs first, followed by fuzzy matching and learned aliases.',
+    fullSyncRun: 'Run Full Sync',
+    fullSyncApply: 'Apply synchronization',
+    fullSyncResetAliases: 'Reset aliases',
+    fullSyncThresholdHint: '≥95% — auto match · 75–94% — review required · below 75% — never linked automatically.',
+    fullSyncSafe: 'Exact',
+    fullSyncAuto: 'Auto',
+    fullSyncReview: 'Review',
+    fullSyncMissing: 'Missing',
+    fullSyncDuplicates: 'Duplicates',
+    fullSyncExtras: 'Extra',
+    fullSyncKnownAliases: 'Saved aliases',
+    fullSyncReviewTitle: 'Possible matches',
+    fullSyncConfirm: 'Confirm',
+    fullSyncReject: 'Not the same',
+    fullSyncConfirmed: 'Confirmed',
+    fullSyncRejected: 'Rejected',
+    fullSyncTable: 'TABLE',
+    fullSyncFigma: 'FIGMA',
+    fullSyncMissingTitle: 'Truly missing from Figma',
+    fullSyncCreateMissingAll: 'Create all Missing',
+    fullSyncCreateMissingOne: 'Create card',
+    fullSyncCreateMissingBase: 'Base',
+    fullSyncCreateMissingHint: 'Cards are created from the last selected banner. Title and Identifier come from the corresponding table row.',
+    fullSyncCreateMissingNoBase: 'No base banner is available. Select cards and run Full Sync again.',
+    fullSyncCreateMissingProgress: 'Creating Missing',
+    fullSyncCreateMissingDone: 'Missing cards created',
+    fullSyncCloneSuggested: 'Duplicate required for this Identifier',
+    fullSyncCloneOne: 'Create duplicate card',
+    fullSyncCloneAll: 'Create all missing duplicates',
+    fullSyncCloneCreated: 'Frame created',
+    fullSyncCloneHint: 'Creation is suggested only after full reconciliation: when one Identifier belongs to multiple rows and one of those rows still lacks its own matching card. Total count difference alone never creates anything.',
+    fullSyncCloneSource: 'Source',
+    fullSyncExtraTitle: 'Figma cards with no suitable table row',
+    fullSyncDuplicateTitle: 'Duplicates',
+    fullSyncApplied: 'Frame names updated',
+    fullSyncApplyHint: 'Applies Exact, Auto, duplicates, and manually confirmed matches.',
+    fullSyncAliasesReset: 'Aliases cleared.',
+    generatorTitle: 'Create cards from table',
+    generatorDesc: 'Creates one card per row: Identifier → frame name, Title → visible title.',
+    generatorColumns: 'Columns',
+    generatorGap: 'Card gap, px',
+    generatorHint: 'Uses the current shared reference. The reference itself is not counted. If the table has 908 rows, 908 new cards are created.',
+    generatorRun: 'Create cards from table',
+    generatorCreating: 'Creating cards',
+    generatorDone: 'Cards created',
+    generatorTitleFallbacks: 'Titles created with fallback',
+    generatorFailed: 'Failed to create',
+    generatorReference: 'Reference',
+    generatorStopped: 'Generation stopped',
+    sortFramesTitle: 'Sort frames',
+    sortFramesDesc: 'Sorts cards and arranges them in the configured grid.',
+    sortFramesButton: 'Sort and pack',
+    sortOrderLabel: 'Order',
+    sortOrderAlpha: 'Alphabetical A–Z',
+    sortOrderTable: 'Table row order',
+    sortChunkColsLabel: 'Columns per chunk',
+    sortChunkRowsLabel: 'Rows per chunk',
+    sortCardGapLabel: 'Gap between cards, px',
+    sortChunkGapLabel: 'Gap between chunks, px',
+    sortChunksPerRowLabel: 'Chunks per row',
+    sortFramesNotInTable: 'Not found in table',
+    sortFramesTableRequired: 'Paste the table above before sorting by table order.',
+    sortFramesDone: 'Frames sorted',
+    sortFramesGroups: 'Parent groups',
+    normalizeTitle: 'Normalize Titles',
+    normalizeHint: 'The reference is read from the <b>title</b> block. Font is applied to every row layer, individual row sizes stay intact, and position/Gap come from the Auto Layout.',
+    referenceNotSet: 'Reference: not set',
+    reference: 'Reference',
+    copyFont: 'Copy font family/style',
+    copyLetterSpacing: 'Copy letter spacing',
+    copyGap: 'Copy Auto Layout gap',
+    copyFrameSize: 'Scale frame like reference',
+    alignCenter: 'Center in parent frame',
+    alignBottom: 'Match bottom position',
+    normalizeNote: '<b>Each row keeps its own font size.</b> Normalize also enforces Cap height → Baseline on every row.',
+    setReference: 'Set reference',
+    applyNormalize: 'Apply to selected',
+    smartBreakTitle: 'Rebuild rows',
+    smartBreakHint: 'Recalculates word distribution and recreates exactly the requested number of row layers inside `title`.',
+    smartLines: 'Number of rows',
+    smartPadding: 'Side padding %',
+    smartMode: 'Mode',
+    smartModeValue: 'Balanced',
+    smartLineHeight: 'Line-height, %',
+    smartProportionalLH: 'Proportional line-height for every line',
+    smartPreserveBottom: 'Preserve bottom position',
+    smartAutoFitAfter: 'Run Auto Fit after breaks',
+    smartBreakNote: 'Use this when you want to change the actual word distribution between rows. Existing manual row breaks will be replaced.',
+    smartBreakButton: 'Rebuild title rows',
+    smartBreaking: 'Calculating line breaks…',
+    smartBroken: 'titles reflowed.',
+    smartBreakSkipped: 'Smart Line Breaks skipped',
+    autoFitTitle: 'Fit row sizes',
+    autoFitHint: 'Fits every separate row layer independently. Structure and row breaks are preserved.',
+    minFont: 'Min font',
+    maxFont: 'Max font',
+    sidePadding: 'Side padding %',
+    preserveBottom: 'Preserve title bottom position',
+    autoLineHeight: 'Line-height, %',
+    autoProportionalLH: 'Proportional line-height for every line',
+
+    autoFitNote: 'Every row is automatically set to Cap height → Baseline. Inter-row spacing is controlled only by the parent Auto Layout Gap.',
+    autoFitButton: 'Fit selected rows',
+    selected: 'selected',
+    gamesDetected: 'Games detected',
+    nothingPasted: 'Nothing pasted.',
+    cannotRecognize: 'Could not recognize title + identifier.',
+    processing: 'Processing…',
+    normalizing: 'Normalizing…',
+    autoFitting: 'Auto fitting…',
+    referenceSaved: 'Reference saved. Now select the target cards.',
+    normalized: 'titles normalized.',
+    autoFitted: 'titles auto-fitted.',
+    skipped: 'skipped.',
+    normalizeSkipped: 'Normalize skipped',
+    autoFitSkipped: 'Auto Fit skipped',
+    renamed: 'Matched rows',
+    actuallyRenamed: 'Frame names updated',
+    reportTableRows: 'Table rows',
+    reportSelectedCards: 'Figma cards',
+    reportClaimedRows: 'Rows matched',
+    reportCountDifference: 'Count difference',
+    skippedStat: 'Skipped',
+    missingStat: 'Missing',
+    extraStat: 'Extra',
+    duplicateStat: 'Duplicates',
+    duplicateBanners: 'Duplicates in Figma',
+    duplicateBannersHint: 'There are more physical Figma cards than available table rows for this match.',
+    selectDuplicates: 'Select duplicates in Figma',
+    sharedIdentifierTitle: 'Cards sharing the same Identifier',
+    sharedIdentifierHint: 'Every table row remains a separate card. These groups use the same identifier more than once, for example when Titles differ by one digit.',
+    sharedIdentifierExpected: 'Table rows',
+    sharedIdentifierAssigned: 'Cards found',
+    sharedIdentifierSelect: 'Select this group',
+    sharedIdentifierSelectAll: 'Select all such cards',
+    missingBanners: 'Missing banners',
+    extraBanners: 'Extra banners in Figma',
+    extraBannersHint: 'Present among the selected Figma frames, but no matching game exists in the table.',
+    skippedFrames: 'Skipped frames',
+    selectExtras: 'Select extras in Figma',
+    renamedFrames: 'Renamed frames',
+    selectSkipped: 'Select skipped in Figma',
+    text: 'Text',
+    backend: {}
+  }
+};
+
+function t(key) {
+  return I18N[currentLang][key] ?? I18N.en[key] ?? key;
+}
+
+function localizeBackendMessage(message) {
+  if (!message) return '';
+  if (currentLang === 'en') return message;
+
+  const exact = I18N.ru.backend[message];
+  if (exact) return exact;
+
+  if (message.startsWith('Duplicate title in table for ')) {
+    return message.replace('Duplicate title in table for ', 'Дубликат title в таблице для ');
+  }
+  if (message.startsWith('Several titles matched inside this frame: ')) {
+    return message.replace('Several titles matched inside this frame: ', 'Внутри фрейма совпало несколько title: ');
+  }
+  if (message.startsWith('Ambiguous fallback match for ')) {
+    return message.replace('Ambiguous fallback match for ', 'Неоднозначное дополнительное совпадение для ');
+  }
+  if (message.startsWith('Several possible titles matched inside this frame: ')) {
+    return message.replace('Several possible titles matched inside this frame: ', 'Внутри фрейма найдено несколько возможных title: ');
+  }
+  return message;
+}
+
+function saveLang(lang) {
+  if(lang !== 'ru' && lang !== 'en') return;
+
+  languageTouched = true;
+  currentLang = lang;
+
+  try {
+    localStorage.setItem('gir-lang', lang);
+    languageLoadedFromLocalStorage = true;
+  } catch (e) {}
+
+  applyLanguage();
+  clearTransientLanguageStatuses();
+
+  if(lastFullSyncResult){
+    renderFullSyncResult(lastFullSyncResult);
+  }
+
+  if(settingsLoaded){
+    saveSettingsNow();
+  }
+}
+
+
+function clearTransientLanguageStatuses(){
+  const ids=[
+    'generatorStatus',
+    'sortFramesStatus',
+    'gradientStatus',
+    'normalizeStatus',
+    'titleFitStatus'
+  ];
+
+  for(const id of ids){
+    const el=document.getElementById(id);
+    if(el) el.innerHTML='';
+  }
+}
+
+function getRowsForSharedReference(){
+  if(!input.value.trim()) return [];
+  const parsed=parseRows(input.value);
+  return parsed.error ? [] : parsed.rows;
+}
+
+function clearTitleFitPreviewUrls(){
+  if(!Array.isArray(titleFitPreviewUrls)) return;
+  for(const url of titleFitPreviewUrls){
+    try{ URL.revokeObjectURL(url); }catch(e){}
+  }
+  titleFitPreviewUrls=[];
+}
+
+function bytesToPreviewUrl(previewBytes){
+  if(!previewBytes || !previewBytes.length) return '';
+
+  try{
+    const bytes=new Uint8Array(previewBytes);
+    const blob=new Blob([bytes],{type:'image/png'});
+    const url=URL.createObjectURL(blob);
+    titleFitPreviewUrls.push(url);
+    return url;
+  }catch(e){
+    return '';
+  }
+}
+
+function updateSharedReferencePreview(previewBytes){
+  const img=document.getElementById('sharedReferenceImage');
+
+  if(sharedReferencePreviewUrl){
+    try{ URL.revokeObjectURL(sharedReferencePreviewUrl); }catch(e){}
+    sharedReferencePreviewUrl=null;
+  }
+
+  if(!previewBytes || !previewBytes.length){
+    img.removeAttribute('src');
+    return;
+  }
+
+  try{
+    const bytes=new Uint8Array(previewBytes);
+    const blob=new Blob([bytes],{type:'image/png'});
+    sharedReferencePreviewUrl=URL.createObjectURL(blob);
+    img.src=sharedReferencePreviewUrl;
+  }catch(e){
+    img.removeAttribute('src');
+  }
+}
+
+
+function updateSelectionDependentControls(){
+  const selectionCount=Number(lastSelectionInfo.count||0);
+  const frameCount=Number(lastSelectionInfo.frameCount||0);
+  const hasSelection=selectionCount>0;
+  const hasFrames=frameCount>0;
+  const hasReference=!!sharedReferenceData;
+
+  const setDisabled=(id,disabled)=>{
+    const el=document.getElementById(id);
+    if(el) el.disabled=!!disabled;
+  };
+
+  // Tools that operate on selected card frames.
+  setDisabled('rename', !hasFrames);
+  setDisabled('runFullSync', !hasFrames);
+  setDisabled('sortFramesAlpha', frameCount < 2);
+  setDisabled('randomizeGradients', !hasFrames);
+  setDisabled('autoMatchGradients', !hasFrames);
+
+  // Generator can use the shared reference. Without one, exactly one selected
+  // card/title is required so the backend can resolve the reference safely.
+  setDisabled(
+    'generateFromTable',
+    !hasSelection || (!hasReference && selectionCount !== 1)
+  );
+
+  // Normalize / Title Fit accept either selected cards or their title layers,
+  // but also require the shared reference.
+  setDisabled('applyNormalize', !(hasReference && hasSelection));
+  setDisabled('previewTitleFit', !(hasReference && hasSelection));
+  setDisabled('applyTitleFit', !(hasReference && hasSelection));
+
+  // A reference can only be replaced from one selected node.
+  setDisabled('setSharedReference', selectionCount !== 1);
+
+  const clearBtn=document.getElementById('clearSharedReference');
+  if(clearBtn){
+    clearBtn.disabled=!hasReference;
+    clearBtn.title=t('sharedReferenceClear');
+    clearBtn.setAttribute('aria-label',t('sharedReferenceClear'));
+  }
+}
+
+function updateReferenceDependentControls(){
+  updateSelectionDependentControls();
+}
+
+function renderSharedReference(){
+  const card=document.getElementById('sharedReferenceCard');
+  const name=document.getElementById('sharedReferenceName');
+  const meta=document.getElementById('sharedReferenceMeta');
+  const statusEl=document.getElementById('sharedReferenceStatus');
+  const setBtn=document.getElementById('setSharedReference');
+  const locateBtn=document.getElementById('locateSharedReference');
+
+  document.getElementById('sharedReferenceLabel').textContent=
+    t('sharedReferenceLabel');
+
+  locateBtn.textContent=t('sharedReferenceLocate');
+  updateReferenceDependentControls();
+
+  if(!sharedReferenceData){
+    card.classList.remove('ready');
+    card.classList.add('empty');
+    name.textContent=t('sharedReferenceEmpty');
+    meta.textContent=t('sharedReferenceEmptyMeta');
+    statusEl.textContent='';
+    setBtn.textContent=t('sharedReferenceSet');
+    locateBtn.disabled=true;
+    updateSharedReferencePreview(null);
+    return;
+  }
+
+  card.classList.remove('empty');
+  card.classList.add('ready');
+
+  name.textContent=
+    sharedReferenceData.title ||
+    sharedReferenceData.frameName ||
+    t('sharedReferenceEmpty');
+
+  const parts=[];
+
+  if(sharedReferenceData.frameName){
+    parts.push(sharedReferenceData.frameName);
+  }
+
+  if(
+    sharedReferenceData.frameWidth &&
+    sharedReferenceData.frameHeight
+  ){
+    parts.push(
+      `${Math.round(sharedReferenceData.frameWidth*10)/10}×`+
+      `${Math.round(sharedReferenceData.frameHeight*10)/10}px`
+    );
+  }
+
+  if(sharedReferenceData.lines){
+    parts.push(`${sharedReferenceData.lines} ${t('rowCountLabel')}`);
+  }
+
+  meta.textContent=parts.join(' · ');
+
+  statusEl.textContent='';
+
+  setBtn.textContent=t('sharedReferenceChange');
+  locateBtn.disabled=false;
+}
+
+function applyLanguage() {
+  document.documentElement.lang = currentLang;
+
+  document.getElementById('langRu').classList.toggle('active', currentLang === 'ru');
+  document.getElementById('langEn').classList.toggle('active', currentLang === 'en');
+
+  document.getElementById('heroSub').innerHTML = t('heroSub');
+  document.getElementById('authorLine').textContent = t('authorLine');
+  renderSharedReference();
+  document.getElementById('normalizeStep2Title').textContent = t('normalizeStep2Title');
+  document.getElementById('normalizeStep2Desc').textContent = t('normalizeStep2Desc');
+  document.getElementById('normalizeAdvancedLabel').textContent = t('advancedSettings');
+  document.getElementById('emptyReportsText').textContent = t('emptyReports');
+  document.getElementById('operationBarSub').textContent = t('runningSub');
+  if(document.getElementById('minimalStatus')) updateMinimalStatus();
+  document.getElementById('tabRenameLabel').textContent = t('tabRename');
+  document.getElementById('tabSortLabel').textContent = t('tabSort');
+  document.getElementById('fullSyncTitle').textContent = t('fullSyncTitle');
+  document.getElementById('fullSyncDesc').textContent = t('fullSyncDesc');
+  document.getElementById('runFullSync').textContent = t('fullSyncRun');
+  document.getElementById('applyFullSync').textContent = t('fullSyncApply');
+  document.getElementById('resetSyncAliases').textContent = t('fullSyncResetAliases');
+  document.getElementById('fullSyncThresholdHint').textContent = t('fullSyncThresholdHint');
+  document.getElementById('generatorTitle').textContent = t('generatorTitle');
+  document.getElementById('generatorDesc').textContent = t('generatorDesc');
+  document.getElementById('generatorColumnsLabel').textContent = t('generatorColumns');
+  document.getElementById('generatorGapLabel').textContent = t('generatorGap');
+  document.getElementById('generatorHint').textContent = t('generatorHint');
+  document.getElementById('generateFromTable').textContent = t('generatorRun');
+  document.getElementById('tabNormalizeLabel').textContent = t('tabNormalize');
+  document.getElementById('tabAutofitLabel').textContent = t('tabAutofit');
+  document.getElementById('tabStylesLabel').textContent = t('tabStyles');
+  document.getElementById('tabReportsLabel').textContent = t('tabReports');
+
+  document.getElementById('gradientTitle').textContent = t('gradientTitle');
+  document.getElementById('gradientDesc').textContent = t('gradientDesc');
+  document.getElementById('gradientPrefixLabel').textContent = t('gradientPrefix');
+  document.getElementById('gradientDistributionLabel').textContent = t('gradientDistribution');
+  document.getElementById('gradientDistributionDisplay').value = t('gradientDistributionValue');
+  document.getElementById('gradientAvoidSameLabel').textContent = t('gradientAvoidSame');
+  document.getElementById('gradientNote').textContent = t('gradientNote');
+
+  document.getElementById('gradientInfoTooltip').innerHTML =
+    `<span class="tooltip-lead">${esc(t('gradientDesc'))}</span>`+
+    `<span class="tooltip-note">${esc(t('gradientNote'))}</span>`;
+
+  document.getElementById('gradientAutoTitle').textContent = t('gradientAutoTitle');
+  document.getElementById('gradientAutoDesc').textContent = t('gradientAutoDesc');
+  document.getElementById('gradientAnalyzeTopLabel').textContent = t('gradientAnalyzeTop');
+  document.getElementById('gradientAutoModeLabel').textContent = t('gradientAutoMode');
+  document.getElementById('gradientAutoModeDisplay').value = t('gradientAutoModeValue');
+  document.getElementById('gradientAutoNote').textContent = t('gradientAutoNote');
+
+  document.getElementById('gradientAutoInfoTooltip').innerHTML =
+    `<span class="tooltip-lead">${esc(t('gradientAutoDesc'))}</span>`+
+    `<span class="tooltip-note">${esc(t('gradientAutoNote'))}</span>`;
+
+  document.getElementById('autoMatchGradients').textContent = t('gradientAutoApply');
+  document.getElementById('scanGradients').textContent = t('scanGradients');
+  document.getElementById('randomizeGradients').textContent = t('randomizeGradients');
+  document.getElementById('reportsLabel').textContent = t('reportsLabel');
+  document.getElementById('reportsHint').textContent = t('reportsHint');
+  document.getElementById('stopOperation').textContent = t('stopOperation');
+  document.getElementById('selectLabel').textContent = t('selectLabel');
+  document.getElementById('pasteLabel').textContent = t('pasteLabel');
+  document.getElementById('pasteHint').textContent = t('pasteHint');
+  document.getElementById('tableTitleColumnLabel').textContent = t('tableTitleColumn');
+  document.getElementById('tableIdentifierColumnLabel').textContent = t('tableIdentifierColumn');
+  document.getElementById('tableColumnModeLabel').textContent = t('tableColumnMode');
+  document.getElementById('tableColumnsHint').textContent = t('tableColumnsHint');
+  updateTableColumnMode();
+  document.getElementById('selectAllText').textContent = t('selectAllText');
+  document.getElementById('rename').textContent = t('rename');
+  document.getElementById('sortFramesTitle').textContent = t('sortFramesTitle');
+  document.getElementById('sortFramesDesc').textContent = t('sortFramesDesc');
+  document.getElementById('sortFramesAlpha').textContent = t('sortFramesButton');
+  document.getElementById('sortOrderLabel').textContent = t('sortOrderLabel');
+  document.getElementById('sortOrderAlphaOption').textContent = t('sortOrderAlpha');
+  document.getElementById('sortOrderTableOption').textContent = t('sortOrderTable');
+  document.getElementById('sortChunkColsLabel').textContent = t('sortChunkColsLabel');
+  document.getElementById('sortChunkRowsLabel').textContent = t('sortChunkRowsLabel');
+  document.getElementById('sortCardGapLabel').textContent = t('sortCardGapLabel');
+  document.getElementById('sortChunkGapLabel').textContent = t('sortChunkGapLabel');
+  document.getElementById('sortChunksPerRowLabel').textContent = t('sortChunksPerRowLabel');
+
+  document.getElementById('normalizeTitle').textContent = t('normalizeTitle');
+  document.getElementById('normalizeHint').innerHTML = t('normalizeHint');
+  document.getElementById('copyFontLabel').textContent = t('copyFont');
+  document.getElementById('copyLetterSpacingLabel').textContent = t('copyLetterSpacing');
+  document.getElementById('copyGapLabel').textContent = t('copyGap');
+  document.getElementById('copyFrameSizeLabel').textContent = t('copyFrameSize');
+  document.getElementById('alignCenterLabel').textContent = t('alignCenter');
+  document.getElementById('alignBottomLabel').textContent = t('alignBottom');
+  document.getElementById('normalizeNote').innerHTML = t('normalizeNote');
+  document.getElementById('setReference').textContent = t('sharedReferenceChange');
+  document.getElementById('applyNormalize').textContent = t('applyNormalize');
+  document.getElementById('titleFitHeading').textContent = t('titleFitHeading');
+  document.getElementById('titleFitLead').textContent = t('titleFitLead');
+  document.getElementById('titleFitTemplateTitle').textContent = t('titleFitTemplateTitle');
+  document.getElementById('titleFitTemplateHint').textContent = t('titleFitTemplateHint');
+  document.getElementById('setTitleFitTemplate').textContent = t('sharedReferenceChange');
+  document.getElementById('titleFitSettingsTitle').textContent = t('titleFitSettingsTitle');
+  document.getElementById('titleFitGapLabel').textContent = t('titleFitGap');
+  document.getElementById('titleFitPaddingLabel').textContent = t('titleFitPadding');
+  document.getElementById('titleFitMinLabel').textContent = t('titleFitMin');
+  document.getElementById('titleFitMaxLabel').textContent = t('titleFitMax');
+  document.getElementById('titleFitApplyTitle').textContent = t('titleFitApplyTitle');
+  document.getElementById('titleFitApplyHint').textContent = t('titleFitApplyHint');
+  document.getElementById('previewTitleFit').textContent = t('titleFitPreview');
+  document.getElementById('applyTitleFit').textContent = t('titleFitApply');
+  renderTitleFitTemplate();
+
+  renderSelectionInfo();
+
+  if (normalizeReferenceData) {
+    const sizeMeta =
+      normalizeReferenceData.frameWidth && normalizeReferenceData.frameHeight
+        ? ` · ${Math.round(normalizeReferenceData.frameWidth * 10) / 10}×${Math.round(normalizeReferenceData.frameHeight * 10) / 10}px`
+        : '';
+
+    const meta = normalizeReferenceData.canonical
+      ? ` · ${normalizeReferenceData.lines || 0} rows${normalizeReferenceData.gap !== null && normalizeReferenceData.gap !== undefined ? ` · Gap ${normalizeReferenceData.gap}px` : ''}${sizeMeta}`
+      : sizeMeta;
+
+    document.getElementById('normalizeRef').innerHTML =
+      `${t('reference')}: <b>${esc(normalizeReferenceData.title)}</b> <span class="hint">(${esc(normalizeReferenceData.frameName)})${esc(meta)}</span>`;
+  } else {
+    document.getElementById('normalizeRef').textContent = t('referenceNotSet');
+  }
+
+  updatePreview();
+  renderSelectionInfo();
+  updateSelectionDependentControls();
+}
+
+function renderSelectionInfo() {
+  const msg = lastSelectionInfo;
+  selectionEl.innerHTML =
+    `<b>${msg.count}</b> ${t('selected')}${msg.names && msg.names.length ? ' — '+msg.names.join(', ')+(msg.count>msg.names.length?'…':'') : ''}`;
+
+  updateMinimalStatus();
+  updateSelectionDependentControls();
+}
+
+document.getElementById('langRu').onclick = () => saveLang('ru');
+document.getElementById('langEn').onclick = () => saveLang('en');
+
+const tabButtons = {
+  rename: document.getElementById('tabRenameBtn'),
+  sort: document.getElementById('tabSortBtn'),
+  normalize: document.getElementById('tabNormalizeBtn'),
+  autofit: document.getElementById('tabAutofitBtn'),
+  styles: document.getElementById('tabStylesBtn'),
+  reports: document.getElementById('tabReportsBtn')
+};
+const tabPanels = {
+  rename: document.getElementById('tab-rename'),
+  sort: document.getElementById('tab-sort'),
+  normalize: document.getElementById('tab-normalize'),
+  autofit: document.getElementById('tab-autofit'),
+  styles: document.getElementById('tab-styles'),
+  reports: document.getElementById('tab-reports')
+};
+
+let currentMainTab = 'rename';
+
+function showTab(name, save=true){
+  currentMainTab = name;
+  Object.entries(tabButtons).forEach(([key, btn]) => btn.classList.toggle('active', key===name));
+  Object.entries(tabPanels).forEach(([key, panel]) => panel.classList.toggle('active', key===name));
+
+  const workspaceStatusStrip=document.getElementById('workspaceStatusStrip');
+
+  if(workspaceStatusStrip){
+    workspaceStatusStrip.style.display=name==='rename' ? 'flex' : 'none';
+  }
+
+  const sharedReferenceCard=document.getElementById('sharedReferenceCard');
+  const needsReference=name==='normalize' || name==='autofit';
+
+  if(sharedReferenceCard){
+    sharedReferenceCard.style.display=needsReference ? 'grid' : 'none';
+  }
+
+  if(needsReference){
+    parent.postMessage({
+      pluginMessage:{
+        type:'get-shared-reference',
+        rows:getRowsForSharedReference()
+      }
+    },'*');
+  }
+
+  if(save) scheduleSettingsSave();
+}
+
+tabButtons.rename.onclick = ()=>showTab('rename');
+tabButtons.sort.onclick = ()=>showTab('sort');
+tabButtons.normalize.onclick = ()=>showTab('normalize');
+tabButtons.autofit.onclick = ()=>showTab('autofit');
+tabButtons.styles.onclick = ()=>showTab('styles');
+tabButtons.reports.onclick = ()=>showTab('reports');
+
+const PERSIST_IDS = [
+  'copyFont','copyLetterSpacing','copyGap','copyFrameSize','alignCenter','alignBottom',
+  'titleFitGap','titleFitPadding','titleFitMin','titleFitMax',
+  'tableTitleColumn','tableIdentifierColumn',
+  'sortOrder','sortChunkCols','sortChunkRows','sortCardGap','sortChunkGap','sortChunksPerRow',
+  'generatorColumns','generatorGap',
+  'gradientPrefix','gradientAvoidSame','gradientAnalyzeTop'
+];
+
+let settingsLoaded = false;
+let settingsSaveTimer = null;
+
+function readControlValue(id){
+  const el = document.getElementById(id);
+  if(!el) return null;
+  if(el.type === 'checkbox') return !!el.checked;
+  return el.value;
+}
+
+function writeControlValue(id, value){
+  const el = document.getElementById(id);
+  if(!el || value === undefined || value === null) return;
+
+  if(el.type === 'checkbox'){
+    el.checked = !!value;
+  }else{
+    el.value = String(value);
+  }
+}
+
+function collectSettings(){
+  const settings = {
+    version: 1,
+    lang: currentLang,
+    tableText: input.value,
+    mainTab: currentMainTab,
+    normalizeAdvancedOpen: !!document.querySelector('#tab-normalize details.advanced')?.open,
+    helpVisible: document.getElementById('heroSub').style.display !== 'none',
+    controls: {}
+  };
+
+  for(const id of PERSIST_IDS){
+    settings.controls[id] = readControlValue(id);
+  }
+
+  return settings;
+}
+
+function applySavedSettings(settings){
+  if(!settings || typeof settings !== 'object'){
+    settingsLoaded = true;
+    updatePreview();
+    return;
+  }
+
+  if(
+    !languageTouched &&
+    !languageLoadedFromLocalStorage &&
+    (settings.lang === 'ru' || settings.lang === 'en')
+  ){
+    currentLang = settings.lang;
+  }
+
+  if(typeof settings.tableText === 'string'){
+    input.value = settings.tableText;
+  }
+
+  if(settings.controls && typeof settings.controls === 'object'){
+    for(const id of PERSIST_IDS){
+      if(Object.prototype.hasOwnProperty.call(settings.controls,id)){
+        writeControlValue(id, settings.controls[id]);
+      }
+    }
+  }
+
+  const advanced = document.querySelector('#tab-normalize details.advanced');
+  if(advanced && typeof settings.normalizeAdvancedOpen === 'boolean'){
+    advanced.open = settings.normalizeAdvancedOpen;
+  }
+
+  if(typeof settings.helpVisible === 'boolean'){
+    document.getElementById('heroSub').style.display = settings.helpVisible ? 'block' : 'none';
+  }
+
+  const allowedTabs = ['rename','normalize','autofit','styles','sort','reports'];
+  showTab(allowedTabs.includes(settings.mainTab) ? settings.mainTab : 'rename', false);
+  settingsLoaded = true;
+  applyLanguage();
+  updatePreview();
+}
+
+function saveSettingsNow(){
+  if(!settingsLoaded) return;
+  parent.postMessage({
+    pluginMessage:{
+      type:'save-settings',
+      settings:collectSettings()
+    }
+  },'*');
+}
+
+function scheduleSettingsSave(){
+  if(!settingsLoaded) return;
+  clearTimeout(settingsSaveTimer);
+  settingsSaveTimer = setTimeout(saveSettingsNow, 180);
+}
+
+for(const id of PERSIST_IDS){
+  const el = document.getElementById(id);
+  if(!el) continue;
+  el.addEventListener('input', scheduleSettingsSave);
+  el.addEventListener('change', scheduleSettingsSave);
+}
+
+const advancedSettings = document.querySelector('#tab-normalize details.advanced');
+if(advancedSettings){
+  advancedSettings.addEventListener('toggle', scheduleSettingsSave);
+}
+
+
+function formatTitleFitMetric(value){
+  if(value === null || value === undefined) return '';
+  if(typeof value === 'number') return String(Math.round(value * 10) / 10);
+  if(typeof value === 'object'){
+    if(value.unit === 'PERCENT') return `${value.value}%`;
+    if(value.unit === 'PIXELS') return `${Math.round(value.value * 10) / 10}px`;
+  }
+  return '';
+}
+
+function renderTitleFitTemplate(){
+  const card=document.getElementById('titleFitTemplateCard');
+  const state=document.getElementById('titleFitTemplateState');
+  const meta=document.getElementById('titleFitTemplateMeta');
+
+  if(!card || !state || !meta) return;
+
+  if(!titleFitTemplateSummary){
+    card.classList.add('empty');
+    state.textContent=t('titleFitTemplateEmpty');
+    meta.textContent='';
+    return;
+  }
+
+  card.classList.remove('empty');
+  state.textContent=t('titleFitTemplateReady');
+
+  const s=titleFitTemplateSummary;
+  const font=[s.fontFamily,s.fontStyle].filter(Boolean).join(' ');
+  const ls=formatTitleFitMetric(s.letterSpacing);
+  const lh=formatTitleFitMetric(s.lineHeight);
+
+  meta.textContent=[
+    font,
+    s.fontSize ? `${Math.round(s.fontSize*10)/10}px` : '',
+    ls ? `Tracking ${ls}` : '',
+    lh ? `LH ${lh}` : ''
+  ].filter(Boolean).join(' · ');
+}
+
+function getTitleFitRowsFromTable(){
+  if(!input.value.trim()) return [];
+  const p=parseRows(input.value);
+  return p.error ? [] : p.rows;
+}
+
+function titleFitPayload(type){
+  return {
+    type,
+    rows:getTitleFitRowsFromTable(),
+    lang:currentLang,
+    visualGap:Number(document.getElementById('titleFitGap').value)||0,
+    maxRows:3,
+    sidePadding:Number(document.getElementById('titleFitPadding').value)||0,
+    minFontSize:Number(document.getElementById('titleFitMin').value)||16,
+    maxFontSize:Number(document.getElementById('titleFitMax').value)||48
+  };
+}
+
+function startOperation(label){
+  const stopBtn=document.getElementById('stopOperation');
+  stopBtn.disabled=false;
+  document.getElementById('operationBarTitle').textContent=label;
+  document.getElementById('operationBar').classList.add('active');
+  document.getElementById('operationHint').textContent='';
+}
+function finishOperation(){
+  document.getElementById('operationBar').classList.remove('active');
+  document.getElementById('operationHint').textContent='';
+}
+
+document.getElementById('helpBtn').onclick=()=>{
+  const el=document.getElementById('heroSub');
+  el.style.display=el.style.display==='none'?'block':'none';
+  scheduleSettingsSave();
+};
+
+
+document.getElementById('stopOperation').onclick = ()=>{
+  const btn=document.getElementById('stopOperation');
+  btn.disabled=true;
+  document.getElementById('operationBarTitle').textContent = t('stopRequested');
+  parent.postMessage({pluginMessage:{type:'cancel-operation',lang:currentLang}},'*');
+};
+
+
+try {
+  const saved = localStorage.getItem('gir-lang');
+  if (saved === 'ru' || saved === 'en') {
+    currentLang = saved;
+    languageLoadedFromLocalStorage = true;
+  }
+} catch (e) {}
+
+function parseCsvLine(line) {
+  const out=[]; let value=''; let quoted=false;
+  for(let i=0;i<line.length;i++){
+    const ch=line[i];
+    if(ch === '"'){
+      if(quoted && line[i+1] === '"'){ value+='"'; i++; }
+      else quoted=!quoted;
+    } else if(ch === ',' && !quoted){ out.push(value); value=''; }
+    else value+=ch;
+  }
+  out.push(value); return out;
+}
+
+function splitLine(line){
+  if(line.includes('\t')) return line.split('\t');
+  if(line.includes(';')) return line.split(';');
+  return parseCsvLine(line);
+}
+
+function norm(v){ return String(v||'').trim().toLowerCase().replace(/[\s_-]+/g,''); }
+
+function looksLikeIdentifier(v){
+  const s=String(v||'').trim();
+  if(!s) return false;
+
+  const lower=s.toLowerCase();
+
+  // These are category values, not identifiers.
+  const categoryValues=[
+    'slots',
+    'slot',
+    'casual',
+    'table_games',
+    'tablegames',
+    'live_games',
+    'livegames',
+    'instant_games',
+    'instantgames',
+    'originals',
+    'original_games',
+    'originalgames'
+  ];
+
+  if(categoryValues.includes(lower)) return false;
+
+  // Legacy identifiers:
+  // mg_slots_autoroulette
+  // hsg_baccarat
+  // ntn_somegame
+  const legacy =
+    /^[a-z0-9]{2,32}_[a-z0-9][a-z0-9_-]*$/i.test(s);
+
+  // New namespaced identifiers:
+  // bgmng:GoldMagnate
+  // bgmng:GoldRushWithJohnny
+  //
+  // Preserve original case after ":" because the backend should rename the
+  // Figma frame to the exact identifier from the table.
+  const namespaced =
+    /^[a-z0-9][a-z0-9_-]{1,31}:[a-z0-9][a-z0-9._:-]*$/i.test(s);
+
+  return legacy || namespaced;
+}
+
+function looksLikeNoise(v){
+  const s=String(v||'').trim().toLowerCase();
+  return !s || /^\d+$/.test(s) || s==='1' || s==='0' ||
+    ['slots','slot','casual','table_games','tablegames','live_games','livegames','instant_games','instantgames','originals','original_games','originalgames','enabled','category','id','identifier','provider'].includes(s);
+}
+
+function getConfiguredTableColumns(){
+  const titleEl=document.getElementById('tableTitleColumn');
+  const identifierEl=document.getElementById('tableIdentifierColumn');
+
+  const titleColumn=Math.max(0,Math.floor(Number(titleEl?.value)||0));
+  const identifierColumn=Math.max(0,Math.floor(Number(identifierEl?.value)||0));
+
+  return {
+    titleColumn,
+    identifierColumn,
+    manual:titleColumn>0 && identifierColumn>0
+  };
+}
+
+function looksLikeMappedHeader(title,identifier){
+  const titleHeaders=['title','gamename','game','name','slotname'];
+  const identifierHeaders=[
+    'identifier','gameidentifier','game_identifier',
+    'externalidentifier','external_id','slug'
+  ].map(norm);
+
+  return (
+    titleHeaders.includes(norm(title)) ||
+    identifierHeaders.includes(norm(identifier))
+  );
+}
+
+function updateTableColumnMode(){
+  const el=document.getElementById('tableColumnMode');
+  if(!el) return;
+
+  const cfg=getConfiguredTableColumns();
+  el.value=cfg.manual ? t('tableColumnManual') : t('tableColumnAuto');
+}
+
+function parseRows(raw){
+  const lines=raw.replace(/\r/g,'').split('\n').filter(x=>x.trim().length);
+  if(!lines.length) return {rows:[],error:t('nothingPasted')};
+
+  const matrix=lines.map(splitLine).map(r=>r.map(v=>String(v).trim()));
+  const configured=getConfiguredTableColumns();
+
+  const titleAliases=['title','gamename','game','name','slotname'];
+  const identifierAliases=[
+    'identifier','gameidentifier','game_identifier',
+    'externalidentifier','external_id','slug'
+  ];
+  const normalizedIdentifierAliases=identifierAliases.map(norm);
+
+  const categoryValues=[
+    'slots','slot','casual','table_games','tablegames',
+    'live_games','livegames','instant_games','instantgames',
+    'originals','original_games','originalgames'
+  ];
+
+  let rows=[];
+  let detectedTitleColumn=0;
+  let detectedIdentifierColumn=0;
+  let detectionMode='auto';
+
+  // MANUAL MODE: the content of Identifier is completely opaque.
+  // No regex and no provider-specific naming format is used.
+  if(configured.manual){
+    const titleIdx=configured.titleColumn-1;
+    const identifierIdx=configured.identifierColumn-1;
+
+    detectedTitleColumn=configured.titleColumn;
+    detectedIdentifierColumn=configured.identifierColumn;
+    detectionMode='manual';
+
+    for(const cols of matrix){
+      const title=(cols[titleIdx]||'').trim();
+      const identifier=(cols[identifierIdx]||'').trim();
+
+      if(!title || !identifier) continue;
+      if(looksLikeMappedHeader(title,identifier)) continue;
+
+      rows.push({title,identifier});
+    }
+  }
+
+  // AUTO MODE: headers first.
+  if(!rows.length && !configured.manual){
+    let headerRow=-1;
+    let titleIdx=-1;
+    let identifierIdx=-1;
+
+    for(let r=0;r<Math.min(matrix.length,15);r++){
+      const h=matrix[r].map(norm);
+      const t=h.findIndex(x=>titleAliases.includes(x));
+      const id=h.findIndex(x=>normalizedIdentifierAliases.includes(x));
+
+      if(t!==-1 && id!==-1){
+        headerRow=r;
+        titleIdx=t;
+        identifierIdx=id;
+        detectedTitleColumn=t+1;
+        detectedIdentifierColumn=id+1;
+        detectionMode='header';
+        break;
+      }
+    }
+
+    if(headerRow!==-1){
+      for(let i=headerRow+1;i<matrix.length;i++){
+        const title=(matrix[i][titleIdx]||'').trim();
+        const identifier=(matrix[i][identifierIdx]||'').trim();
+
+        if(title && identifier){
+          rows.push({title,identifier});
+        }
+      }
+    }
+  }
+
+  // AUTO MODE without headers: structural relation around category.
+  if(!rows.length && !configured.manual){
+    for(const cols of matrix){
+      let categoryIdx=-1;
+
+      for(let j=0;j<cols.length;j++){
+        const v=String(cols[j]||'').trim().toLowerCase();
+        if(categoryValues.includes(v)){
+          categoryIdx=j;
+          break;
+        }
+      }
+
+      if(categoryIdx!==-1){
+        const candidateTitle=(cols[categoryIdx-2]||'').trim();
+        const candidateEnabled=(cols[categoryIdx-1]||'').trim();
+        const candidateIdentifier=(cols[categoryIdx+1]||'').trim();
+
+        if(
+          candidateTitle &&
+          candidateIdentifier &&
+          (
+            candidateEnabled==='1' ||
+            candidateEnabled==='0' ||
+            candidateEnabled==='true' ||
+            candidateEnabled==='false'
+          )
+        ){
+          rows.push({
+            title:candidateTitle,
+            identifier:candidateIdentifier
+          });
+
+          if(!detectedTitleColumn){
+            detectedTitleColumn=categoryIdx-1;
+            detectedIdentifierColumn=categoryIdx+2;
+            detectionMode='schema';
+          }
+
+          continue;
+        }
+      }
+
+      // Legacy last-resort heuristic.
+      const identifierIndexes=[];
+
+      for(let j=0;j<cols.length;j++){
+        if(looksLikeIdentifier(cols[j])) identifierIndexes.push(j);
+      }
+
+      if(!identifierIndexes.length) continue;
+
+      const idIdx=identifierIndexes[identifierIndexes.length-1];
+      const identifier=cols[idIdx].trim();
+
+      let title='';
+      let inferredTitleIdx=-1;
+
+      for(let j=idIdx-1;j>=0;j--){
+        const s=(cols[j]||'').trim();
+        if(!s) continue;
+        if(looksLikeNoise(s) || looksLikeIdentifier(s)) continue;
+
+        title=s;
+        inferredTitleIdx=j;
+        break;
+      }
+
+      if(title && identifier){
+        rows.push({title,identifier});
+
+        if(!detectedTitleColumn){
+          detectedTitleColumn=inferredTitleIdx+1;
+          detectedIdentifierColumn=idIdx+1;
+          detectionMode='heuristic';
+        }
+      }
+    }
+  }
+
+  // IMPORTANT:
+  // Every parsed spreadsheet row is a separate physical card slot.
+  // Do NOT deduplicate by title or identifier.
+  //
+  // Examples that must remain separate:
+  // Hatching Gold! Rooster's Riches -> mgg_hatchinggoldroostersriches
+  // Hatching Gold! Rooster's Riches -> mgg_hatchinggoldroostersriches92
+  //
+  // Even two fully identical rows remain two required physical cards.
+  const clean=rows.map((r,index)=>({
+    ...r,
+    _syncRowKey:`table-row-${index+1}`
+  }));
+
+  const columns={
+    title:detectedTitleColumn,
+    identifier:detectedIdentifierColumn,
+    mode:detectionMode
+  };
+
+  return clean.length
+    ? {rows:clean,error:null,columns}
+    : {rows:[],error:t('cannotRecognize'),columns};
+}
+
+function updateMinimalStatus(){
+  const count = (lastSelectionInfo && Number.isFinite(lastSelectionInfo.count)) ? lastSelectionInfo.count : 0;
+  let rows = 0;
+  const raw = input.value.trim();
+
+  if(raw){
+    const p = parseRows(raw);
+    if(!p.error) rows = p.rows.length;
+  }
+
+  document.getElementById('minimalStatus').innerHTML =
+    `${t('selectedChip')} <b>${count}</b> <span class="sep">·</span> ${t('tableChip')} <b>${rows}</b>`;
+}
+
+function updatePreview(){
+  if(!input.value.trim()){
+    preview.innerHTML='';
+    updateMinimalStatus();
+    return;
+  }
+
+  const p=parseRows(input.value);
+  updateMinimalStatus();
+
+  if(p.error){
+    preview.innerHTML=`<span class="err">${esc(p.error)}</span>`;
+    return;
+  }
+
+  const sample=p.rows.slice(0,3)
+    .map(r=>`${esc(r.title)} → <code>${esc(r.identifier)}</code>`)
+    .join('<br>');
+
+  const columns=p.columns||{};
+  const mapping=
+    columns.title && columns.identifier
+      ? `<br><span class="hint">${t('tableColumnsDetected')}: Title ${columns.title} · Identifier ${columns.identifier}</span>`
+      : '';
+
+  preview.innerHTML=
+    `<span class="ok">${t('gamesDetected')}: <b>${p.rows.length}</b></span>`+
+    mapping+
+    (sample ? `<br>${sample}` : '');
+}
+input.addEventListener('input', ()=>{
+  updatePreview();
+  scheduleSettingsSave();
+});
+
+for(const id of ['tableTitleColumn','tableIdentifierColumn']){
+  const el=document.getElementById(id);
+
+  if(!el) continue;
+
+  el.addEventListener('input',()=>{
+    updateTableColumnMode();
+    updatePreview();
+    scheduleSettingsSave();
+  });
+
+  el.addEventListener('change',()=>{
+    updateTableColumnMode();
+    updatePreview();
+    scheduleSettingsSave();
+  });
+}
+
+document.getElementById('runFullSync').onclick=()=>{
+  const parsed=parseRows(input.value);
+
+  if(parsed.error){
+    document.getElementById('fullSyncStatus').innerHTML=
+      `<div class="err">${esc(parsed.error)}</div>`;
+    return;
+  }
+
+  fullSyncSessionId=null;
+  fullSyncReviewState=new Map();
+  document.getElementById('applyFullSync').disabled=true;
+  document.getElementById('fullSyncStatus').innerHTML=
+    `<div>${t('processing')}</div>`;
+
+  startOperation(t('fullSyncTitle'));
+
+  parent.postMessage({
+    pluginMessage:{
+      type:'run-full-sync',
+      rows:parsed.rows,
+      lang:currentLang
+    }
+  },'*');
+};
+
+document.getElementById('applyFullSync').onclick=()=>{
+  if(!fullSyncSessionId) return;
+
+  startOperation(t('fullSyncApply'));
+
+  parent.postMessage({
+    pluginMessage:{
+      type:'apply-full-sync',
+      sessionId:fullSyncSessionId,
+      lang:currentLang
+    }
+  },'*');
+};
+
+document.getElementById('resetSyncAliases').onclick=()=>{
+  parent.postMessage({
+    pluginMessage:{
+      type:'reset-full-sync-aliases',
+      lang:currentLang
+    }
+  },'*');
+};
+
+document.getElementById('generateFromTable').onclick=()=>{
+  const parsed=parseRows(input.value);
+  const status=document.getElementById('generatorStatus');
+
+  if(parsed.error){
+    status.innerHTML=`<div class="err">${esc(parsed.error)}</div>`;
+    return;
+  }
+
+  if(!parsed.rows.length){
+    status.innerHTML=`<div class="err">${esc(t('cannotRecognize'))}</div>`;
+    return;
+  }
+
+  const columns=Math.max(
+    1,
+    Math.min(
+      100,
+      Number(document.getElementById('generatorColumns').value)||8
+    )
+  );
+
+  const gap=Math.max(
+    0,
+    Math.min(
+      2000,
+      Number(document.getElementById('generatorGap').value)||24
+    )
+  );
+
+  const sidePadding=Math.max(
+    0,
+    Math.min(
+      200,
+      Number(document.getElementById('titleFitPadding').value)||12
+    )
+  );
+
+  const visualGap=Math.max(
+    0,
+    Math.min(
+      40,
+      Number(document.getElementById('titleFitGap').value)||0
+    )
+  );
+
+  const minFontSize=Math.max(
+    1,
+    Number(document.getElementById('titleFitMin').value)||16
+  );
+
+  const maxFontSize=Math.max(
+    minFontSize,
+    Number(document.getElementById('titleFitMax').value)||48
+  );
+
+  status.innerHTML=
+    `<div>${t('generatorCreating')}: <b>0 / ${parsed.rows.length}</b></div>`;
+
+  startOperation(t('generatorTitle'));
+
+  parent.postMessage({
+    pluginMessage:{
+      type:'generate-cards-from-table',
+      rows:parsed.rows,
+      columns,
+      gap,
+      sidePadding,
+      visualGap,
+      minFontSize,
+      maxFontSize,
+      lang:currentLang
+    }
+  },'*');
+};
+
+document.getElementById('sortFramesAlpha').onclick=()=>{
+  let rows=[];
+  if(input.value.trim()){
+    const parsed=parseRows(input.value);
+    if(!parsed.error) rows=parsed.rows;
+  }
+
+  const order=document.getElementById('sortOrder').value || 'alpha';
+
+  if(order==='table' && !rows.length){
+    document.getElementById('sortFramesStatus').innerHTML=`<div class="err">${t('sortFramesTableRequired')}</div>`;
+    return;
+  }
+
+  document.getElementById('sortFramesStatus').innerHTML=`<div>${t('processing')}</div>`;
+  startOperation(t('sortFramesTitle'));
+
+  parent.postMessage({
+    pluginMessage:{
+      type:'sort-frames-alpha',
+      rows,
+      order,
+      chunkCols:Math.max(1,Number(document.getElementById('sortChunkCols').value)||10),
+      chunkRows:Math.max(1,Number(document.getElementById('sortChunkRows').value)||10),
+      cardGap:Math.max(0,Number(document.getElementById('sortCardGap').value)||0),
+      chunkGap:Math.max(0,Number(document.getElementById('sortChunkGap').value)||0),
+      chunksPerRow:Math.max(1,Number(document.getElementById('sortChunksPerRow').value)||5),
+      lang:currentLang
+    }
+  },'*');
+};
+
+
+document.getElementById('scanGradients').onclick=()=>{
+  const prefix=document.getElementById('gradientPrefix').value.trim() || 'gradient/slots';
+  document.getElementById('gradientStatus').innerHTML=`<div>${t('processing')}</div>`;
+
+  parent.postMessage({
+    pluginMessage:{
+      type:'scan-gradient-styles',
+      prefix,
+      lang:currentLang
+    }
+  },'*');
+};
+
+document.getElementById('randomizeGradients').onclick=()=>{
+  const prefix=document.getElementById('gradientPrefix').value.trim() || 'gradient/slots';
+
+  document.getElementById('gradientStatus').innerHTML=`<div>${t('processing')}</div>`;
+  startOperation(t('gradientTitle'));
+
+  parent.postMessage({
+    pluginMessage:{
+      type:'randomize-gradients',
+      prefix,
+      avoidSame:document.getElementById('gradientAvoidSame').checked,
+      lang:currentLang
+    }
+  },'*');
+};
+
+
+document.getElementById('autoMatchGradients').onclick=()=>{
+  const prefix=document.getElementById('gradientPrefix').value.trim() || 'gradient/slots';
+  const topPercent=Math.max(
+    35,
+    Math.min(
+      95,
+      Number(document.getElementById('gradientAnalyzeTop').value)||70
+    )
+  );
+
+  document.getElementById('gradientStatus').innerHTML=`<div>${t('processing')}</div>`;
+  startOperation(t('gradientAutoTitle'));
+
+  parent.postMessage({
+    pluginMessage:{
+      type:'auto-match-gradients',
+      prefix,
+      topPercent,
+      lang:currentLang
+    }
+  },'*');
+};
+
+document.getElementById('selectAllText').onclick=()=>{
+  document.getElementById('selectTextStatus').textContent='';
+
+  let rows=[];
+  if(input.value.trim()){
+    const p=parseRows(input.value);
+    if(!p.error) rows=p.rows;
+  }
+
+  parent.postMessage({
+    pluginMessage:{
+      type:'select-title-layers',
+      rows,
+      lang:currentLang
+    }
+  },'*');
+};
+
+
+function requestSharedReference(){
+  document.getElementById('sharedReferenceStatus').innerHTML=
+    `<span class="hint">${esc(t('processing'))}</span>`;
+
+  parent.postMessage({
+    pluginMessage:{
+      type:'set-shared-reference',
+      rows:getRowsForSharedReference(),
+      lang:currentLang
+    }
+  },'*');
+}
+
+document.getElementById('setSharedReference').onclick=()=>{
+  requestSharedReference();
+};
+
+document.getElementById('locateSharedReference').onclick=()=>{
+  parent.postMessage({
+    pluginMessage:{
+      type:'select-shared-reference',
+      lang:currentLang
+    }
+  },'*');
+};
+
+document.getElementById('clearSharedReference').onclick=()=>{
+  parent.postMessage({
+    pluginMessage:{
+      type:'clear-shared-reference',
+      lang:currentLang
+    }
+  },'*');
+};
+
+document.getElementById('rename').onclick=()=>{
+  const p=parseRows(input.value);
+  if(p.error){ status.innerHTML=`<div class="err">${esc(p.error)}</div>`; return; }
+  status.innerHTML=`<div>${t('processing')}</div>`;
+  startOperation(t('processing'));
+  showTab('reports');
+  parent.postMessage({pluginMessage:{type:'rename',rows:p.rows,lang:currentLang}},'*');
+};
+
+
+document.getElementById('setReference').onclick=()=>{
+  requestSharedReference();
+};
+
+document.getElementById('applyNormalize').onclick=()=>{
+  if(!sharedReferenceData) return;
+
+  let rows=[];
+  if(input.value.trim()){
+    const p=parseRows(input.value);
+    if(!p.error) rows=p.rows;
+  }
+
+  document.getElementById('normalizeStatus').innerHTML=`<div>${t('normalizing')}</div>`;
+  startOperation(t('normalizing'));
+
+  parent.postMessage({
+    pluginMessage:{
+      type:'normalize-titles',
+      rows,
+      lang:currentLang,
+      copyFont:document.getElementById('copyFont').checked,
+      copyLetterSpacing:document.getElementById('copyLetterSpacing').checked,
+      copyGap:document.getElementById('copyGap').checked,
+      copyFrameSize:document.getElementById('copyFrameSize').checked,
+      alignCenter:document.getElementById('alignCenter').checked,
+      alignBottom:document.getElementById('alignBottom').checked
+    }
+  },'*');
+};
+
+
+
+
+document.getElementById('setTitleFitTemplate').onclick=()=>{
+  document.getElementById('titleFitStatus').innerHTML='';
+  requestSharedReference();
+};
+
+document.getElementById('previewTitleFit').onclick=()=>{
+  if(!sharedReferenceData) return;
+
+  document.getElementById('titleFitStatus').innerHTML=`<div>${t('processing')}</div>`;
+  parent.postMessage({
+    pluginMessage:titleFitPayload('preview-titlefit')
+  },'*');
+};
+
+document.getElementById('applyTitleFit').onclick=()=>{
+  if(!sharedReferenceData) return;
+
+  document.getElementById('titleFitStatus').innerHTML=`<div>${t('processing')}</div>`;
+  startOperation('Title Fit');
+  parent.postMessage({
+    pluginMessage:titleFitPayload('apply-titlefit')
+  },'*');
+};
+
+
+
+function rgb255ToHsv(r, g, b){
+  r/=255; g/=255; b/=255;
+
+  const max=Math.max(r,g,b);
+  const min=Math.min(r,g,b);
+  const delta=max-min;
+
+  let h=0;
+
+  if(delta>0.00001){
+    if(max===r) h=((g-b)/delta)%6;
+    else if(max===g) h=(b-r)/delta+2;
+    else h=(r-g)/delta+4;
+
+    h*=60;
+    if(h<0) h+=360;
+  }
+
+  return {
+    h,
+    s:max===0?0:delta/max,
+    v:max
+  };
+}
+
+async function decodeGradientAnalysisImage(bytes){
+  const blob=new Blob([bytes],{type:'image/png'});
+
+  if(typeof createImageBitmap==='function'){
+    return await createImageBitmap(blob);
+  }
+
+  return await new Promise((resolve,reject)=>{
+    const url=URL.createObjectURL(blob);
+    const img=new Image();
+
+    img.onload=()=>{
+      URL.revokeObjectURL(url);
+      resolve(img);
+    };
+
+    img.onerror=()=>{
+      URL.revokeObjectURL(url);
+      reject(new Error('Could not decode exported card image.'));
+    };
+
+    img.src=url;
+  });
+}
+
+async function analyzeBannerDominantColor(bytes,topPercent){
+  const image=await decodeGradientAnalysisImage(bytes);
+
+  const width=Math.max(1,Math.min(72,image.width||72));
+  const sourceHeight=Math.max(1,image.height||1);
+  const areaRatio=Math.max(0.35,Math.min(0.95,(Number(topPercent)||70)/100));
+  const sampledHeight=Math.max(1,Math.round(sourceHeight*areaRatio));
+  const height=Math.max(1,Math.round(width*(sampledHeight/Math.max(1,image.width||width))));
+
+  const canvas=document.createElement('canvas');
+  canvas.width=width;
+  canvas.height=height;
+
+  const ctx=canvas.getContext('2d',{willReadFrequently:true});
+
+  if(!ctx) throw new Error('Canvas color analysis is unavailable.');
+
+  // Crop to the top artwork region so the current bottom gradient/title does
+  // not dominate the color choice.
+  ctx.drawImage(
+    image,
+    0,0,image.width||width,sampledHeight,
+    0,0,width,height
+  );
+
+  if(image && typeof image.close==='function'){
+    try{image.close();}catch(e){}
+  }
+
+  const data=ctx.getImageData(0,0,width,height).data;
+  const bins=24;
+  const histogram=new Array(bins).fill(0);
+  const samples=[];
+  let totalWeight=0;
+
+  for(let y=0;y<height;y++){
+    const verticalWeight=0.75+0.45*(y/Math.max(1,height-1));
+
+    for(let x=0;x<width;x++){
+      const i=(y*width+x)*4;
+      const r=data[i], g=data[i+1], b=data[i+2], a=data[i+3];
+
+      if(a<80) continue;
+
+      const hsv=rgb255ToHsv(r,g,b);
+
+      // Ignore neutral UI/background pixels and very dark pixels.
+      if(hsv.v<0.1) continue;
+      if(hsv.s<0.20) continue;
+      if(hsv.v>0.94 && hsv.s<0.24) continue;
+
+      const weight=
+        Math.pow(hsv.s,1.45)*
+        (0.35+0.65*hsv.v)*
+        verticalWeight;
+
+      if(weight<=0) continue;
+
+      const bin=Math.min(
+        bins-1,
+        Math.floor((hsv.h/360)*bins)
+      );
+
+      histogram[bin]+=weight;
+      totalWeight+=weight;
+      samples.push({r,g,b,hsv,weight,bin});
+    }
+  }
+
+  // If there are almost no chromatic pixels, do a softer second pass.
+  if(samples.length<8){
+    for(let y=0;y<height;y++){
+      for(let x=0;x<width;x++){
+        const i=(y*width+x)*4;
+        const r=data[i], g=data[i+1], b=data[i+2], a=data[i+3];
+
+        if(a<80) continue;
+
+        const hsv=rgb255ToHsv(r,g,b);
+
+        if(hsv.v<0.08) continue;
+        if(hsv.s<0.10) continue;
+        if(hsv.v>0.96 && hsv.s<0.15) continue;
+
+        const weight=Math.max(0.05,hsv.s)*(0.3+0.7*hsv.v);
+        const bin=Math.min(bins-1,Math.floor((hsv.h/360)*bins));
+
+        histogram[bin]+=weight;
+        totalWeight+=weight;
+        samples.push({r,g,b,hsv,weight,bin});
+      }
+    }
+  }
+
+  if(!samples.length){
+    throw new Error('No usable banner color was detected.');
+  }
+
+  let bestBin=0;
+
+  for(let i=1;i<bins;i++){
+    if(histogram[i]>histogram[bestBin]) bestBin=i;
+  }
+
+  let sumR=0,sumG=0,sumB=0,sumW=0;
+
+  for(const sample of samples){
+    const direct=Math.abs(sample.bin-bestBin);
+    const circular=Math.min(direct,bins-direct);
+
+    if(circular>1) continue;
+
+    const neighborhoodWeight=
+      circular===0?1:0.42;
+
+    const w=sample.weight*neighborhoodWeight;
+
+    sumR+=sample.r*w;
+    sumG+=sample.g*w;
+    sumB+=sample.b*w;
+    sumW+=w;
+  }
+
+  if(sumW<=0){
+    throw new Error('Could not calculate the dominant banner color.');
+  }
+
+  const r=Math.round(sumR/sumW);
+  const g=Math.round(sumG/sumW);
+  const b=Math.round(sumB/sumW);
+  const hsv=rgb255ToHsv(r,g,b);
+
+  return {
+    color:{
+      r:r/255,
+      g:g/255,
+      b:b/255,
+      h:hsv.h,
+      s:hsv.s,
+      v:hsv.v
+    },
+    confidence:
+      totalWeight>0
+        ? histogram[bestBin]/totalWeight
+        : 0
+  };
+}
+
+
+
+function renderFullSyncList(title,items,formatter){
+  if(!items || !items.length) return '';
+
+  let html=`<details class="sync-details"><summary>${esc(title)} (${items.length})</summary><div class="sync-small-list">`;
+
+  for(const item of items.slice(0,80)){
+    html+=`<div class="sync-small-row">${formatter(item)}</div>`;
+  }
+
+  html+='</div></details>';
+
+  return html;
+}
+
+function fullSyncMissingCreatePayload(){
+  return {
+    columns: Number(document.getElementById('generatorColumns')?.value) || 8,
+    gap: Number(document.getElementById('generatorGap')?.value) || 24,
+    sidePadding: Number(document.getElementById('titleFitPadding')?.value) || 12,
+    visualGap: Number(document.getElementById('titleFitGap')?.value) || 0,
+    minFontSize: Number(document.getElementById('titleFitMin')?.value) || 16,
+    maxFontSize: Number(document.getElementById('titleFitMax')?.value) || 48
+  };
+}
+
+function renderFullSyncResult(msg){
+  fullSyncSessionId=msg.sessionId;
+  fullSyncReviewState=new Map(
+    (msg.review||[]).map(item=>[item.id,item])
+  );
+
+  const applyBtn=document.getElementById('applyFullSync');
+  applyBtn.disabled=((msg.safeCount||0)===0 && !(msg.review||[]).some(x=>x.confirmed));
+
+  const physicalGap=Number(msg.physicalGap)||0;
+
+  const unresolvedCount=
+    (msg.review||[]).filter(x=>!x.confirmed && !x.rejected).length +
+    (msg.missing||[]).length +
+    (msg.extras||[]).length +
+    (msg.duplicates||[]).length;
+
+  const semanticStatus=
+    unresolvedCount===0
+      ? `<div class="ok" style="margin-top:10px"><b>${t('fullSyncStatusOk')}</b></div>`
+      : `<div class="warn" style="margin-top:10px"><b>${t('fullSyncStatusReview')}</b> · ${unresolvedCount}</div>`;
+
+  let html=`
+    <div style="padding:10px 12px;border:1px solid var(--line);border-radius:10px;background:var(--surface-2)">
+      <div style="display:flex;gap:14px;align-items:center;flex-wrap:wrap">
+        <div><b>Figma:</b> ${msg.selectedCount||0}</div>
+        <div><b>Table:</b> ${msg.tableCount||0}</div>
+        <div><b>${t('fullSyncAssignedRows')}:</b> ${msg.primaryAssignedCount||0}</div>
+        <div><b>${t('fullSyncCountDifference')}:</b> ${physicalGap>0?'+':''}${physicalGap}</div>
+      </div>
+      <div class="hint" style="margin-top:5px">${t('fullSyncOneToOneRule')}</div>
+      ${semanticStatus}
+    </div>
+
+    <div class="sync-summary">
+      <div class="sync-stat"><strong>${(msg.exact||[]).length}</strong><span>${t('fullSyncSafe')}</span></div>
+      <div class="sync-stat"><strong>${(msg.auto||[]).length}</strong><span>${t('fullSyncAuto')}</span></div>
+      <div class="sync-stat"><strong>${(msg.review||[]).length}</strong><span>${t('fullSyncReview')}</span></div>
+      <div class="sync-stat"><strong>${(msg.missing||[]).length}</strong><span>${t('fullSyncMissing')}</span></div>
+      <div class="sync-stat"><strong>${(msg.duplicates||[]).length}</strong><span>${t('fullSyncDuplicates')}</span></div>
+    </div>
+    <div class="hint" style="margin-top:8px">${t('fullSyncKnownAliases')}: <b id="fullSyncAliasCount">${msg.aliasCount||0}</b> · ${t('fullSyncExtras')}: <b>${(msg.extras||[]).length}</b></div>
+    <div class="hint" style="margin-top:4px">${t('fullSyncApplyHint')}</div>`;
+
+  if(msg.review && msg.review.length){
+    html+=`<details class="sync-details" open><summary>${t('fullSyncReviewTitle')} (${msg.review.length})</summary><div class="sync-review-list">`;
+
+    for(const item of msg.review){
+      html+=`
+        <div class="sync-review-item" id="syncReview-${esc(item.id)}">
+          <div class="sync-review-pair">
+            <div class="sync-review-side">
+              <div class="sync-review-kicker">${t('fullSyncFigma')}</div>
+              <div class="sync-review-main">${esc(item.frameName)}</div>
+              <div class="sync-review-sub">${esc(item.sourceText||'')}</div>
+            </div>
+            <div class="sync-score">${Math.round(item.score)}%</div>
+            <div class="sync-review-side">
+              <div class="sync-review-kicker">${t('fullSyncTable')}</div>
+              <div class="sync-review-main">${esc(item.title)}</div>
+              <div class="sync-review-sub">${esc(item.identifier)}</div>
+            </div>
+          </div>
+          <div class="sync-review-actions">
+            <button data-sync-reject="${esc(item.id)}">${t('fullSyncReject')}</button>
+            <button class="primary" data-sync-confirm="${esc(item.id)}">${t('fullSyncConfirm')}</button>
+          </div>
+        </div>`;
+    }
+
+    html+='</div></details>';
+  }
+
+  if(msg.missing && msg.missing.length){
+    html+=`<details class="sync-details" open>
+      <summary>${t('fullSyncMissingTitle')} (${msg.missing.length})</summary>`;
+
+    if(msg.missingReferenceAvailable){
+      html+=`
+        <div style="padding:8px 0 8px">
+          <button class="primary" id="createAllFullSyncMissing">${t('fullSyncCreateMissingAll')} (${msg.missing.length})</button>
+          <div class="hint" style="margin-top:6px"><b>${t('fullSyncCreateMissingBase')}:</b> ${esc(msg.missingReferenceName||'')}</div>
+          <div class="hint" style="margin-top:3px">${t('fullSyncCreateMissingHint')}</div>
+        </div>`;
+    }else{
+      html+=`<div class="warn" style="padding:8px 0">${t('fullSyncCreateMissingNoBase')}</div>`;
+    }
+
+    html+='<div class="sync-small-list">';
+
+    for(const item of msg.missing){
+      html+=`<div class="sync-small-row">
+        <div style="display:flex;gap:8px;align-items:center;justify-content:space-between">
+          <div style="min-width:0">
+            <b>${esc(item.title)}</b>
+            <br><span class="hint">${esc(item.identifier)}</span>
+          </div>
+          ${msg.missingReferenceAvailable
+            ? `<button data-create-missing-row="${esc(item.rowKey)}">${t('fullSyncCreateMissingOne')}</button>`
+            : ''}
+        </div>
+      </div>`;
+    }
+
+    html+='</div></details>';
+  }
+
+  html+=renderFullSyncList(
+    t('fullSyncExtraTitle'),
+    msg.extras||[],
+    item=>`<b>${esc(item.frameName)}</b>${item.bestTitle?`<br><span class="hint">${esc(item.bestTitle)} · ${Math.round(item.score||0)}%</span>`:''}`
+  );
+
+  html+=renderFullSyncList(
+    t('fullSyncDuplicateTitle'),
+    msg.duplicates||[],
+    item=>`<b>${esc(item.frameName)}</b><br><span class="hint">${esc(item.title)} · ${esc(item.identifier)}</span>`
+  );
+
+  document.getElementById('fullSyncStatus').innerHTML=html;
+
+  document.querySelectorAll('[data-create-missing-row]').forEach(btn=>{
+    btn.onclick=()=>{
+      if(!fullSyncSessionId) return;
+
+      startOperation(t('fullSyncCreateMissingProgress'));
+
+      parent.postMessage({
+        pluginMessage:{
+          type:'create-full-sync-missing-row',
+          sessionId:fullSyncSessionId,
+          rowKey:btn.dataset.createMissingRow,
+          ...fullSyncMissingCreatePayload(),
+          lang:currentLang
+        }
+      },'*');
+    };
+  });
+
+  const createAllMissingBtn=document.getElementById('createAllFullSyncMissing');
+
+  if(createAllMissingBtn){
+    createAllMissingBtn.onclick=()=>{
+      if(!fullSyncSessionId) return;
+
+      startOperation(t('fullSyncCreateMissingProgress'));
+
+      parent.postMessage({
+        pluginMessage:{
+          type:'create-all-full-sync-missing-rows',
+          sessionId:fullSyncSessionId,
+          ...fullSyncMissingCreatePayload(),
+          lang:currentLang
+        }
+      },'*');
+    };
+  }
+
+  document.querySelectorAll('[data-sync-confirm]').forEach(btn=>{
+    btn.onclick=()=>{
+      parent.postMessage({
+        pluginMessage:{
+          type:'confirm-full-sync-review',
+          sessionId:fullSyncSessionId,
+          reviewId:btn.dataset.syncConfirm,
+          lang:currentLang
+        }
+      },'*');
+    };
+  });
+
+  document.querySelectorAll('[data-sync-reject]').forEach(btn=>{
+    btn.onclick=()=>{
+      parent.postMessage({
+        pluginMessage:{
+          type:'reject-full-sync-review',
+          sessionId:fullSyncSessionId,
+          reviewId:btn.dataset.syncReject,
+          lang:currentLang
+        }
+      },'*');
+    };
+  });
+}
+
+function updateFullSyncReviewUI(review,aliasCount){
+  if(!review) return;
+
+  fullSyncReviewState.set(review.id,review);
+
+  const item=document.getElementById(`syncReview-${review.id}`);
+  if(!item) return;
+
+  item.classList.toggle('confirmed',review.confirmed===true);
+  item.classList.toggle('rejected',review.rejected===true);
+
+  const actions=item.querySelector('.sync-review-actions');
+
+  if(actions){
+    if(review.confirmed){
+      actions.innerHTML=`<span class="ok">${t('fullSyncConfirmed')}</span>`;
+    }else if(review.rejected){
+      actions.innerHTML=`<span class="hint">${t('fullSyncRejected')}</span>`;
+    }
+  }
+
+  const aliasEl=document.getElementById('fullSyncAliasCount');
+
+  if(aliasEl && aliasCount!==undefined){
+    aliasEl.textContent=String(aliasCount);
+  }
+
+  const anyConfirmed=[...fullSyncReviewState.values()].some(x=>x.confirmed===true);
+  const applyBtn=document.getElementById('applyFullSync');
+
+  if(anyConfirmed){
+    applyBtn.disabled=false;
+  }
+}
+
+onmessage=async (event)=>{
+  const msg=event.data.pluginMessage;
+
+  if(msg && msg.type==='gradient-color-analyze-request'){
+    try{
+      const analyzed=await analyzeBannerDominantColor(
+        msg.bytes,
+        msg.topPercent
+      );
+
+      parent.postMessage({
+        pluginMessage:{
+          type:'gradient-color-analyze-result',
+          requestId:msg.requestId,
+          color:analyzed.color,
+          confidence:analyzed.confidence
+        }
+      },'*');
+    }catch(e){
+      parent.postMessage({
+        pluginMessage:{
+          type:'gradient-color-analyze-result',
+          requestId:msg.requestId,
+          error:e && e.message ? e.message : String(e)
+        }
+      },'*');
+    }
+
+    return;
+  }
+
+
+  if(msg.type==='settings-loaded'){
+    applySavedSettings(msg.settings);
+    return;
+  }
+  if(!msg) return;
+
+  if(msg.type==='shared-reference-error'){
+    document.getElementById('sharedReferenceStatus').innerHTML=
+      `<span class="err">${esc(localizeBackendMessage(msg.message||''))}</span>`;
+    return;
+  }
+
+  if(msg.type==='shared-reference-cleared'){
+    sharedReferenceData=null;
+    normalizeReferenceData=null;
+    titleFitTemplateSummary=null;
+
+    updateSharedReferencePreview(null);
+    renderSharedReference();
+    renderTitleFitTemplate();
+    updateSelectionDependentControls();
+
+    const normalizeStatus=document.getElementById('normalizeStatus');
+    const titleFitStatus=document.getElementById('titleFitStatus');
+
+    if(normalizeStatus) normalizeStatus.innerHTML='';
+    if(titleFitStatus){ clearTitleFitPreviewUrls(); titleFitStatus.innerHTML=''; }
+
+    return;
+  }
+
+  if(msg.type==='shared-reference-info' || msg.type==='shared-reference-set'){
+    if(msg.empty){
+      sharedReferenceData=null;
+      normalizeReferenceData=null;
+      renderSharedReference();
+      return;
+    }
+
+    sharedReferenceData={
+      cardId:msg.cardId,
+      frameName:msg.frameName,
+      title:msg.title,
+      lines:msg.lines,
+      gap:msg.gap,
+      canonical:msg.canonical,
+      frameWidth:msg.frameWidth,
+      frameHeight:msg.frameHeight,
+      nodeType:msg.nodeType,
+      titleFitReady:msg.titleFitReady===true
+    };
+
+    normalizeReferenceData={
+      title:msg.title,
+      frameName:msg.frameName,
+      lines:msg.lines,
+      gap:msg.gap,
+      canonical:msg.canonical,
+      frameWidth:msg.frameWidth,
+      frameHeight:msg.frameHeight
+    };
+
+    if(msg.titleFitSummary){
+      titleFitTemplateSummary=msg.titleFitSummary;
+      renderTitleFitTemplate();
+    }
+
+    updateSharedReferencePreview(msg.previewBytes||null);
+    renderSharedReference();
+    updateSelectionDependentControls();
+
+    const sizeMeta =
+      msg.frameWidth && msg.frameHeight
+        ? ` · ${Math.round(msg.frameWidth * 10) / 10}×${Math.round(msg.frameHeight * 10) / 10}px`
+        : '';
+
+    const meta = msg.canonical
+      ? ` · ${msg.lines || 0} rows${msg.gap !== null && msg.gap !== undefined ? ` · Gap ${msg.gap}px` : ''}${sizeMeta}`
+      : sizeMeta;
+
+    document.getElementById('normalizeRef').innerHTML=
+      `${t('reference')}: <b>${esc(msg.title||msg.frameName||'')}</b> `+
+      `<span class="hint">(${esc(msg.frameName||'')})${esc(meta)}</span>`;
+
+    return;
+  }
+
+  if(msg.type==='selection-info'){
+    lastSelectionInfo = {
+      count: Number(msg.count||0),
+      frameCount: Number(msg.frameCount||0),
+      names: msg.names || []
+    };
+    renderSelectionInfo();
+    return;
+  }
+
+  if(msg.type==='table-generator-progress'){
+    const status=document.getElementById('generatorStatus');
+    status.innerHTML=
+      `<div>${t('generatorCreating')}: <b>${msg.created||0} / ${msg.total||0}</b></div>`+
+      (msg.referenceName
+        ? `<div class="hint">${t('generatorReference')}: ${esc(msg.referenceName)}</div>`
+        : '');
+    return;
+  }
+
+  if(msg.type==='table-generator-error'){
+    finishOperation();
+    document.getElementById('generatorStatus').innerHTML=
+      `<div class="err">${esc(localizeBackendMessage(msg.message||''))}</div>`;
+    return;
+  }
+
+  if(msg.type==='table-generator-result'){
+    finishOperation();
+
+    let html=
+      `<div class="${msg.failed && msg.failed.length ? 'warn' : 'ok'}">`+
+      `${msg.stopped ? t('generatorStopped') : t('generatorDone')}: `+
+      `<b>${msg.created||0}</b> / <b>${msg.total||0}</b></div>`+
+      `<div class="hint" style="margin-top:5px">`+
+      `${t('generatorReference')}: <b>${esc(msg.referenceName||'')}</b>`+
+      ` · ${t('generatorTitleFallbacks')}: <b>${msg.titleFallbacks||0}</b>`+
+      ` · ${t('generatorFailed')}: <b>${(msg.failed||[]).length}</b>`+
+      `</div>`;
+
+    if(msg.failed && msg.failed.length){
+      html+=`<details class="sync-details" style="margin-top:8px"><summary>${t('generatorFailed')} (${msg.failed.length})</summary><div class="list">`;
+
+      for(const item of msg.failed.slice(0,50)){
+        html+=`<div class="item"><b>${esc(item.title||item.identifier||'')}</b><br><code>${esc(item.identifier||'')}</code><br><span class="hint">${esc(localizeBackendMessage(item.reason||''))}</span></div>`;
+      }
+
+      html+=`</div></details>`;
+    }
+
+    document.getElementById('generatorStatus').innerHTML=html;
+    parent.postMessage({pluginMessage:{type:'get-selection'}},'*');
+    return;
+  }
+
+  if(msg.type==='sort-frames-error'){
+    finishOperation();
+    document.getElementById('sortFramesStatus').innerHTML=
+      `<div class="err">${esc(localizeBackendMessage(msg.message))}</div>`;
+  }
+
+  if(msg.type==='sort-frames-result'){
+    finishOperation();
+
+    let html=
+      `<div class="ok">${t('sortFramesDone')}: <b>${msg.sorted}</b></div>`+
+      `<div class="hint">${t('sortFramesGroups')}: <b>${msg.groups}</b>`+
+      ` · ${t('sortChunksLabel')}: <b>${msg.chunks||0}</b>`+
+      `${msg.order==='table' ? ` · ${t('sortFramesNotInTable')}: <b>${msg.notInTable||0}</b>` : ''}</div>`;
+
+    if(msg.stopped){
+      html=`<div class="warn">${t('stoppedEarly')}</div>`+html;
+    }
+
+    document.getElementById('sortFramesStatus').innerHTML=html;
+
+    parent.postMessage({pluginMessage:{type:'get-selection'}},'*');
+  }
+
+  if(msg.type==='gradient-styles-scanned'){
+    const el=document.getElementById('gradientStatus');
+
+    if(msg.count){
+      const names=(msg.names||[]).slice(0,8).map(esc).join(' · ');
+      el.innerHTML=
+        `<div class="ok">${t('gradientFound')}: <b>${msg.count}</b></div>`+
+        (names ? `<div class="hint" style="margin-top:5px">${names}${msg.count>8?' …':''}</div>` : '');
+    }else{
+      el.innerHTML=`<div class="err">${t('gradientNoStyles')}</div>`;
+    }
+  }
+
+  if(msg.type==='full-sync-error'){
+    finishOperation();
+
+    document.getElementById('fullSyncStatus').innerHTML=
+      `<div class="err">${esc(localizeBackendMessage(msg.message||''))}</div>`;
+
+    return;
+  }
+
+  if(msg.type==='full-sync-result'){
+    finishOperation();
+    lastFullSyncResult=msg;
+    renderFullSyncResult(msg);
+    return;
+  }
+
+  if(msg.type==='full-sync-review-updated'){
+    updateFullSyncReviewUI(
+      msg.review,
+      msg.aliasCount
+    );
+
+    return;
+  }
+
+  if(msg.type==='full-sync-missing-create-progress'){
+    document.getElementById('fullSyncStatus').insertAdjacentHTML(
+      'afterbegin',
+      `<div class="hint">${t('fullSyncCreateMissingProgress')}: <b>${msg.created||0} / ${msg.total||0}</b></div>`
+    );
+    return;
+  }
+
+  if(msg.type==='full-sync-missing-created' || msg.type==='full-sync-missing-created-all'){
+    finishOperation();
+
+    const parsed=parseRows(input.value);
+
+    if(parsed.error){
+      document.getElementById('fullSyncStatus').insertAdjacentHTML(
+        'afterbegin',
+        `<div class="ok">${t('fullSyncCreateMissingDone')}: <b>${(msg.created||[]).length}</b></div>`
+      );
+      return;
+    }
+
+    document.getElementById('fullSyncStatus').innerHTML=
+      `<div class="ok">${t('fullSyncCreateMissingDone')}: <b>${(msg.created||[]).length}</b></div>`+
+      ((msg.skipped||[]).length
+        ? `<div class="warn">${t('skippedStat')}: <b>${msg.skipped.length}</b></div>`
+        : '')+
+      `<div>${t('processing')}</div>`;
+
+    parent.postMessage({
+      pluginMessage:{
+        type:'rerun-full-sync-session',
+        sessionId:msg.sessionId,
+        rows:parsed.rows,
+        lang:currentLang
+      }
+    },'*');
+
+    return;
+  }
+
+  if(msg.type==='full-sync-clone-created'){
+    const parsed=parseRows(input.value);
+
+    if(parsed.error){
+      document.getElementById('fullSyncStatus').insertAdjacentHTML(
+        'afterbegin',
+        `<div class="ok">${t('fullSyncCloneCreated')}</div>`
+      );
+      return;
+    }
+
+    document.getElementById('fullSyncStatus').innerHTML=
+      `<div class="ok">${t('fullSyncCloneCreated')}</div><div>${t('processing')}</div>`;
+
+    parent.postMessage({
+      pluginMessage:{
+        type:'rerun-full-sync-session',
+        sessionId:msg.sessionId,
+        rows:parsed.rows,
+        lang:currentLang
+      }
+    },'*');
+
+    return;
+  }
+
+  if(msg.type==='full-sync-clones-created'){
+    finishOperation();
+
+    const parsed=parseRows(input.value);
+
+    if(parsed.error) return;
+
+    document.getElementById('fullSyncStatus').innerHTML=
+      `<div class="ok">${t('fullSyncCloneCreated')}: <b>${msg.created.length}</b></div><div>${t('processing')}</div>`;
+
+    parent.postMessage({
+      pluginMessage:{
+        type:'rerun-full-sync-session',
+        sessionId:msg.sessionId,
+        rows:parsed.rows,
+        lang:currentLang
+      }
+    },'*');
+
+    return;
+  }
+
+  if(msg.type==='full-sync-applied'){
+    finishOperation();
+
+    document.getElementById('fullSyncStatus').insertAdjacentHTML(
+      'afterbegin',
+      `<div class="ok" style="margin-top:10px">${t('fullSyncApplied')}: <b>${msg.applied.length}</b>${msg.skipped.length?` · ${t('skippedStat')}: <b>${msg.skipped.length}</b>`:''}</div>`
+    );
+
+    return;
+  }
+
+  if(msg.type==='full-sync-aliases-reset'){
+    const aliasEl=document.getElementById('fullSyncAliasCount');
+    if(aliasEl) aliasEl.textContent='0';
+
+    document.getElementById('fullSyncStatus').insertAdjacentHTML(
+      'afterbegin',
+      `<div class="ok">${t('fullSyncAliasesReset')}</div>`
+    );
+
+    return;
+  }
+
+  if(msg.type==='gradient-auto-error'){
+    finishOperation();
+
+    const message=
+      msg.message === 'Select one or more cards first.'
+        ? t('gradientNoCards')
+        : String(msg.message||'').startsWith('No local Paint Styles found under')
+          ? t('gradientNoStyles')
+          : localizeBackendMessage(msg.message);
+
+    document.getElementById('gradientStatus').innerHTML=
+      `<div class="err">${esc(message)}</div>`;
+
+    return;
+  }
+
+  if(msg.type==='gradient-auto-result'){
+    finishOperation();
+
+    let html=
+      `<div class="ok">${t('gradientApplied')}: <b>${msg.applied.length}</b></div>`+
+      `<div class="hint">${t('gradientFound')}: <b>${msg.stylesFound}</b> · ${t('gradientSkipped')}: <b>${msg.skipped.length}</b></div>`;
+
+    if(msg.applied.length){
+      html+='<details><summary>'+t('gradientAutoColor')+'</summary><div class="result-list">';
+
+      for(const x of msg.applied.slice(0,30)){
+        html+=
+          `<div class="item"><code>${esc(x.cardName)}</code><br>`+
+          `${esc(x.bannerColor)} → ${esc(x.styleName)} (${esc(x.styleColor)})</div>`;
+      }
+
+      html+='</div></details>';
+    }
+
+    if(msg.skipped.length){
+      html+='<details><summary>'+t('gradientSkipped')+'</summary><div class="result-list">';
+
+      for(const x of msg.skipped.slice(0,30)){
+        html+=`<div class="item"><code>${esc(x.cardName)}</code><br>${esc(x.reason)}</div>`;
+      }
+
+      html+='</div></details>';
+    }
+
+    if(msg.stopped){
+      html=`<div class="warn">${t('stoppedEarly')}</div>`+html;
+    }
+
+    document.getElementById('gradientStatus').innerHTML=html;
+
+    return;
+  }
+
+  if(msg.type==='gradient-randomize-error'){
+    finishOperation();
+    const el=document.getElementById('gradientStatus');
+    const message =
+      msg.message === 'Select one or more cards first.'
+        ? t('gradientNoCards')
+        : String(msg.message||'').startsWith('No local Paint Styles found under')
+          ? t('gradientNoStyles')
+          : localizeBackendMessage(msg.message);
+
+    el.innerHTML=`<div class="err">${esc(message)}</div>`;
+  }
+
+  if(msg.type==='gradient-randomize-result'){
+    finishOperation();
+
+    let html=
+      `<div class="ok">${t('gradientApplied')}: <b>${msg.applied.length}</b></div>`+
+      `<div class="hint">${t('gradientFound')}: <b>${msg.stylesFound}</b> · ${t('gradientSkipped')}: <b>${msg.skipped.length}</b></div>`;
+
+    if(msg.skipped.length){
+      html+='<details><summary>'+t('gradientSkipped')+'</summary><div class="result-list">';
+      for(const x of msg.skipped.slice(0,30)){
+        html+=`<div class="item"><code>${esc(x.cardName)}</code><br>${esc(x.reason)}</div>`;
+      }
+      html+='</div></details>';
+    }
+
+    document.getElementById('gradientStatus').innerHTML=html;
+  }
+
+  if(msg.type==='select-title-result'){
+    const el=document.getElementById('selectTextStatus');
+
+    if(msg.error){
+      const localized =
+        msg.error === 'Select one or more cards first.'
+          ? t('selectTextNoCards')
+          : msg.error === 'No game-title layers found inside the selected cards.'
+            ? t('selectTextNone')
+            : localizeBackendMessage(msg.error);
+
+      el.innerHTML=`<span class="err">${esc(localized)}</span>`;
+    }else{
+      let html=`<span class="ok">${t('selectTextDone')}: <b>${msg.count}</b></span>`;
+      if(msg.skippedCards){
+        html+=` <span class="hint">· ${t('skippedCardsLabel')}: ${msg.skippedCards}</span>`;
+      }
+      el.innerHTML=html;
+    }
+  }
+
+  if(msg.type==='titlefit-template-loaded'){
+    titleFitTemplateSummary=msg.summary || null;
+    renderTitleFitTemplate();
+  }
+
+  if(msg.type==='titlefit-template-error'){
+    clearTitleFitPreviewUrls();
+    document.getElementById('titleFitStatus').innerHTML=
+      `<div class="err">${esc(localizeBackendMessage(msg.message))}</div>`;
+  }
+
+  if(msg.type==='titlefit-template-set'){
+    clearTitleFitPreviewUrls();
+    titleFitTemplateSummary=msg.summary || null;
+    renderTitleFitTemplate();
+    document.getElementById('titleFitStatus').innerHTML=
+      `<div class="ok">${t('titleFitTemplateReady')}</div>`;
+  }
+
+  if(msg.type==='titlefit-preview-error'){
+    clearTitleFitPreviewUrls();
+    document.getElementById('titleFitStatus').innerHTML=
+      `<div class="err">${esc(localizeBackendMessage(msg.message))}</div>`;
+  }
+
+  if(msg.type==='titlefit-preview-progress'){
+    document.getElementById('titleFitStatus').innerHTML=
+      `<div>${t('titleFitPreviewPreparing')}: <b>${msg.done||0} / ${msg.total||0}</b></div>`+
+      ((msg.selected||0) > (msg.total||0)
+        ? `<div class="hint">${t('titleFitPreviewReady')}: ${msg.total||0} / ${msg.selected||0}</div>`
+        : '');
+    return;
+  }
+
+  if(msg.type==='titlefit-apply-progress'){
+    document.getElementById('titleFitStatus').innerHTML=
+      `<div>${t('titleFitProgress')}: <b>${msg.processed||0} / ${msg.total||0}</b></div>`+
+      `<div class="hint">${t('titleFitProcessed')}: <b>${msg.changed||0}</b> · ${t('titleFitSkipped')}: <b>${msg.skipped||0}</b></div>`;
+    return;
+  }
+
+  if(msg.type==='normalize-progress'){
+    document.getElementById('normalizeStatus').innerHTML=
+      `<div>${t('normalizing')}: <b>${msg.processed||0} / ${msg.total||0}</b></div>`;
+    return;
+  }
+
+  if(msg.type==='titlefit-preview-result'){
+    clearTitleFitPreviewUrls();
+
+    let html=`<div class="ok">${t('titleFitPreviewReady')}: <b>${msg.items.length}</b>${(msg.resolvedCards||0) > msg.items.length ? ` / ${msg.resolvedCards}` : ''}</div>`;
+
+    if(msg.items.length){
+      html+='<div class="titlefit-preview-list">';
+      for(const x of msg.items.slice(0,6)){
+        const previewUrl = bytesToPreviewUrl(x.previewBytes);
+        html+=`<div class="titlefit-preview-item">`+
+          `${previewUrl ? `<div class="titlefit-preview-thumb"><img src="${esc(previewUrl)}" alt="Preview"></div>` : ''}`+
+          `<div class="titlefit-preview-copy">`+
+            `<div class="titlefit-before">${esc(x.before)}</div>`+
+            `<div class="titlefit-after">${(x.after||[]).map(esc).join(' / ')}</div>`+
+            `${x.beforeRows ? `<div class="titlefit-before" style="margin-top:3px">${t('titleFitRowsLabel')}: ${x.beforeRows} → ${x.afterRows}</div>` : ''}`+
+            `<div class="titlefit-before" style="margin-top:3px">${t('titleFitGapLabelShort')}: ${esc(String(x.visualGap ?? 0))} px</div>`+
+          `</div>`+
+          `</div>`;
+      }
+      html+='</div>';
+    }
+
+    if(msg.skipped && msg.skipped.length){
+      html+=`<div class="warn" style="margin-top:8px">${t('titleFitSkipped')}: <b>${msg.skipped.length}</b></div>`;
+    }
+
+    document.getElementById('titleFitStatus').innerHTML=html;
+  }
+
+  if(msg.type==='titlefit-apply-error'){
+    clearTitleFitPreviewUrls();
+    finishOperation();
+    document.getElementById('titleFitStatus').innerHTML=
+      `<div class="err">${esc(localizeBackendMessage(msg.message))}</div>`;
+  }
+
+  if(msg.type==='titlefit-apply-result'){
+    clearTitleFitPreviewUrls();
+    finishOperation();
+
+    let html=
+      `<div class="ok">${t('titleFitProcessed')}: <b>${msg.changed.length}</b></div>`+
+      `<div class="hint">${t('titleFitSkipped')}: <b>${msg.skipped.length}</b></div>`;
+
+    if(msg.skipped && msg.skipped.length){
+      const firstSkip = msg.skipped[0];
+      html += `<div class="err" style="margin-top:6px"><b>${esc(firstSkip.cardName||'')}</b>: ${esc(localizeBackendMessage(firstSkip.reason||''))}</div>`;
+    }
+
+    if(msg.stopped){
+      html=`<div class="warn">${t('stoppedEarly')}</div>`+html;
+    }
+
+    const examples=(msg.changed||[]).slice(0,4);
+    if(examples.length){
+      html+='<div class="titlefit-preview-list">';
+      for(const x of examples){
+        html+=`<div class="titlefit-preview-item">`+
+          `<div class="titlefit-before">${esc(x.title)}</div>`+
+          `<div class="titlefit-after">${(x.lines||[]).map(esc).join(' / ')}</div>`+
+          `<div class="titlefit-before" style="margin-top:3px">${t('titleFitGapLabelShort')}: ${esc(String(x.visualGap ?? 0))} px</div>`+
+          `</div>`;
+      }
+      html+='</div>';
+    }
+
+    if(msg.skipped && msg.skipped.length){
+      html+='<details><summary>'+t('titleFitSkipped')+'</summary><div class="result-list">';
+      for(const x of msg.skipped.slice(0,40)){
+        html+=`<div class="item"><code>${esc(x.cardName)}</code><br>${esc(localizeBackendMessage(x.reason))}</div>`;
+      }
+      html+='</div></details>';
+    }
+
+    document.getElementById('titleFitStatus').innerHTML=html;
+  }
+
+  if(msg.type==='error'){
+    finishOperation();
+    status.innerHTML=`<div class="err">${esc(localizeBackendMessage(msg.message))}</div>`;
+  }
+
+  if(msg.type==='normalize-reference-set'){
+    normalizeReferenceData = {
+      title: msg.title,
+      frameName: msg.frameName,
+      lines: msg.lines,
+      gap: msg.gap,
+      canonical: msg.canonical,
+      frameWidth: msg.frameWidth,
+      frameHeight: msg.frameHeight
+    };
+
+    const sizeMeta =
+      msg.frameWidth && msg.frameHeight
+        ? ` · ${Math.round(msg.frameWidth * 10) / 10}×${Math.round(msg.frameHeight * 10) / 10}px`
+        : '';
+
+    const meta = msg.canonical
+      ? ` · ${msg.lines || 0} rows${msg.gap !== null && msg.gap !== undefined ? ` · Gap ${msg.gap}px` : ''}${sizeMeta}`
+      : sizeMeta;
+
+    document.getElementById('normalizeRef').innerHTML=
+      `${t('reference')}: <b>${esc(msg.title)}</b> <span class="hint">(${esc(msg.frameName)})${esc(meta)}</span>`;
+
+    document.getElementById('normalizeStatus').innerHTML=
+      `<div class="ok">${t('referenceSaved')}</div>`;
+  }
+
+  if(msg.type==='normalize-error'){
+    finishOperation();
+    document.getElementById('normalizeStatus').innerHTML=`<div class="err">${esc(localizeBackendMessage(msg.message))}</div>`;
+  }
+
+  if(msg.type==='normalize-result'){
+    finishOperation();
+    let html=`<div class="ok"><b>${msg.changedCount ?? msg.changed.length}</b> ${t('normalized')}</div>`;
+    if(msg.stopped){
+      html =  `<div class="warn">${t('stoppedEarly')}</div>`  + html;
+    }
+    if(msg.skipped.length){
+      html+=`<div class="warn"><b>${msg.skipped.length}</b> ${t('skipped')}</div>`;
+      html+=`<details><summary>${t('normalizeSkipped')}</summary><div class="result-list">`;
+      for(const x of msg.skipped){
+        html+=`<div class="item"><code>${esc(x.frameName)}</code><br>${esc(localizeBackendMessage(x.reason))}</div>`;
+      }
+      html+='</div></details>';
+    }
+    document.getElementById('normalizeStatus').innerHTML=html;
+  }
+
+
+  if(msg.type==='result'){
+    finishOperation();
+    skippedIds=(msg.skipped||[]).map(x=>x.nodeId);
+    extraIds=(msg.extras||[]).map(x=>x.nodeId);
+    duplicateIds=(msg.duplicates||[]).map(x=>x.nodeId);
+
+    const rowGap =
+      Number(msg.tableRowCount || 0) -
+      Number(msg.selectedCount || 0);
+
+    let html=`
+      <div style="padding:10px 12px;border:1px solid var(--line);border-radius:10px;background:var(--surface-2);margin-bottom:10px">
+        <div style="display:flex;gap:14px;flex-wrap:wrap">
+          <div><b>${t('reportSelectedCards')}:</b> ${msg.selectedCount ?? 0}</div>
+          <div><b>${t('reportTableRows')}:</b> ${msg.tableRowCount ?? 0}</div>
+          <div><b>${t('reportClaimedRows')}:</b> ${msg.claimedRowCount ?? 0}</div>
+          <div><b>${t('reportCountDifference')}:</b> ${rowGap>0?'+':''}${rowGap}</div>
+        </div>
+        <div class="hint" style="margin-top:6px">
+          ${t('fullSyncOneToOneRule')}
+        </div>
+      </div>
+
+      <div class="summary">
+        <div class="stat ok"><strong>${msg.matched.length}</strong>${t('renamed')}</div>
+        <div class="stat warn"><strong>${(msg.extras||[]).length}</strong>${t('extraStat')}</div>
+        <div class="stat warn"><strong>${(msg.duplicates||[]).length}</strong>${t('duplicateStat')}</div>
+        <div class="stat warn"><strong>${msg.skipped.length}</strong>${t('skippedStat')}</div>
+        <div class="stat err"><strong>${msg.missing.length}</strong>${t('missingStat')}</div>
+      </div>`;
+
+    if(msg.actuallyRenamed !== undefined){
+      html+=`<div class="hint" style="margin:8px 2px 0">${t('actuallyRenamed')}: <b>${msg.actuallyRenamed}</b></div>`;
+    }
+
+
+
+    const sharedGroups=msg.sharedIdentifierGroups||[];
+
+    if(sharedGroups.length){
+      sharedIdentifierCardIds=[
+        ...new Set(
+          sharedGroups.flatMap(group =>
+            (group.cards||[]).map(card=>card.nodeId)
+          )
+        )
+      ];
+
+      html+=`
+        <div class="section">
+          <div class="section-head">${t('sharedIdentifierTitle')} (${sharedGroups.length})</div>
+          <div style="padding:8px 10px 0">
+            <div class="hint" style="margin-bottom:8px">${t('sharedIdentifierHint')}</div>
+            ${sharedIdentifierCardIds.length
+              ? `<button id="selectAllSharedIdentifierCards">${t('sharedIdentifierSelectAll')} (${sharedIdentifierCardIds.length})</button>`
+              : ''}
+          </div>
+          <div class="list">`;
+
+      for(const group of sharedGroups){
+        const nodeIds=(group.cards||[]).map(card=>card.nodeId);
+
+        html+=`
+          <div class="item">
+            <code>${esc(group.identifier)}</code>
+            <br><span class="hint">${t('sharedIdentifierExpected')}: ${group.expectedCount} · ${t('sharedIdentifierAssigned')}: ${group.assignedCount}</span>
+            <div style="margin-top:6px">`;
+
+        for(const row of group.titles||[]){
+          html+=`<div style="font-size:10px;margin:2px 0">${esc(row.title)}</div>`;
+        }
+
+        html+=`</div>`;
+
+        if(nodeIds.length){
+          html+=`
+            <div style="margin-top:7px">
+              <button data-select-shared-group="${esc(nodeIds.join(','))}">${t('sharedIdentifierSelect')} (${nodeIds.length})</button>
+            </div>`;
+        }
+
+        html+=`</div>`;
+      }
+
+      html+=`</div></div>`;
+    }
+
+    if(msg.duplicates && msg.duplicates.length){
+      html+=`
+        <div class="section">
+          <div class="section-head">${t('duplicateBanners')} (${msg.duplicates.length})</div>
+          <div style="padding:8px 10px 0">
+            <div class="hint" style="margin-bottom:8px">${t('duplicateBannersHint')}</div>
+            <button id="selectDuplicates">${t('selectDuplicates')}</button>
+          </div>
+          <div class="list">`;
+
+      for(const x of msg.duplicates){
+        const texts=x.texts && x.texts.length
+          ? `<br><span class="hint">${t('text')}: ${x.texts.map(esc).join(' · ')}</span>`
+          : '';
+
+        const duplicateInfo=x.duplicateIdentifier
+          ? `<br><span class="hint">${esc(x.duplicateIdentifier)} · ${esc(x.duplicateOfFrameName||'')}</span>`
+          : '';
+
+        html+=`
+          <div class="item">
+            <code>${esc(x.frameName)}</code>
+            ${duplicateInfo}
+            ${texts}
+          </div>`;
+      }
+
+      html+=`</div></div>`;
+    }
+
+    if(msg.extras && msg.extras.length){
+      html+=`
+        <div class="section">
+          <div class="section-head">${t('extraBanners')} (${msg.extras.length})</div>
+          <div style="padding:8px 10px 0">
+            <div class="hint" style="margin-bottom:8px">${t('extraBannersHint')}</div>
+            <button id="selectExtras">${t('selectExtras')}</button>
+          </div>
+          <div class="list">`;
+
+      for(const x of msg.extras){
+        const texts=x.texts && x.texts.length
+          ? `<br><span class="hint">${t('text')}: ${x.texts.map(esc).join(' · ')}</span>`
+          : '';
+
+        const reason=x.reason
+          ? `<br><span class="hint">${esc(localizeBackendMessage(x.reason))}</span>`
+          : '';
+
+        html+=`
+          <div class="item">
+            <code>${esc(x.frameName)}</code>
+            ${reason}
+            ${texts}
+          </div>`;
+      }
+
+      html+=`</div></div>`;
+    }
+
+    if(msg.missing.length){
+      html+=`
+        <div class="section">
+          <div class="section-head">${t('missingBanners')} (${msg.missing.length})</div>
+          <div class="list">`;
+
+      for(const x of msg.missing){
+        html+=`
+          <div class="item">
+            <b>${esc(x.title)}</b>
+            <br><code>${esc(x.identifier)}</code>
+          </div>`;
+      }
+      html+=`</div></div>`;
+    }
+
+    if(msg.skipped.length){
+      html+=`
+        <div class="section">
+          <div class="section-head">${t('skippedFrames')} (${msg.skipped.length})</div>
+          <div style="padding:8px 10px 0">
+            <button id="selectSkipped">${t('selectSkipped')}</button>
+          </div>
+          <div class="list">`;
+
+      for(const x of msg.skipped){
+        const texts=x.texts && x.texts.length
+          ? `<br><span class="hint">${t('text')}: ${x.texts.map(esc).join(' · ')}</span>`
+          : '';
+        html+=`
+          <div class="item">
+            <code>${esc(x.frameName)}</code>
+            <br>${esc(localizeBackendMessage(x.reason))}
+            ${texts}
+          </div>`;
+      }
+      html+=`</div></div>`;
+    }
+
+    if(msg.matched.length){
+      html+=`
+        <div class="section">
+          <div class="section-head">${t('renamedFrames')} (${msg.matched.length})</div>
+          <div class="list">`;
+      for(const x of msg.matched){
+        html+=`<div class="item">${esc(x.title)} → <code>${esc(x.identifier)}</code></div>`;
+      }
+      html+=`</div></div>`;
+    }
+
+    status.innerHTML=html;
+
+    document.querySelectorAll('[data-select-shared-group]').forEach(btn=>{
+      btn.onclick=()=>{
+        const nodeIds=String(btn.dataset.selectSharedGroup||'')
+          .split(',')
+          .filter(Boolean);
+
+        parent.postMessage({
+          pluginMessage:{
+            type:'select-shared-identifier-cards',
+            nodeIds,
+            lang:currentLang
+          }
+        },'*');
+      };
+    });
+
+    const allSharedBtn=document.getElementById('selectAllSharedIdentifierCards');
+
+    if(allSharedBtn){
+      allSharedBtn.onclick=()=>{
+        parent.postMessage({
+          pluginMessage:{
+            type:'select-shared-identifier-cards',
+            nodeIds:sharedIdentifierCardIds,
+            lang:currentLang
+          }
+        },'*');
+      };
+    }
+
+    const duplicatesBtn=document.getElementById('selectDuplicates');
+    if(duplicatesBtn){
+      duplicatesBtn.onclick=()=>{
+        parent.postMessage({
+          pluginMessage:{
+            type:'select-duplicates',
+            nodeIds:duplicateIds,
+            lang:currentLang
+          }
+        },'*');
+      };
+    }
+
+    const extrasBtn=document.getElementById('selectExtras');
+    if(extrasBtn){
+      extrasBtn.onclick=()=>{
+        parent.postMessage({
+          pluginMessage:{
+            type:'select-extras',
+            nodeIds:extraIds,
+            lang:currentLang
+          }
+        },'*');
+      };
+    }
+
+    const btn=document.getElementById('selectSkipped');
+    if(btn){
+      btn.onclick=()=>{
+        parent.postMessage({pluginMessage:{type:'select-skipped',nodeIds:skippedIds,lang:currentLang}},'*');
+      };
+    }
+  }
+};
+
+function esc(s){
+  return String(s).replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;')
+    .replaceAll('"','&quot;').replaceAll("'",'&#039;');
+}
+
+applyLanguage();
+parent.postMessage({pluginMessage:{type:'load-settings'}},'*');
+parent.postMessage({pluginMessage:{type:'load-titlefit-template'}},'*');
+parent.postMessage({pluginMessage:{type:'get-selection'}},'*');
+
+window.addEventListener('beforeunload', ()=>{
+  if(settingsLoaded) saveSettingsNow();
+});
+</script>
+
+  </div>
+</div>
+</body>
+</html>
