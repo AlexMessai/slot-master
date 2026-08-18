@@ -4535,7 +4535,7 @@ async function smartLineBreakTitles(rows, options) {
     const titleNodes = getTitleNodes(match);
 
     // Reflowing multiple separate text layers would require merging them and could
-    // damage custom typography, so v5.13 handles the safe case: one title TextNode.
+    // damage custom typography, so this handles the safe case: one title TextNode.
     if (titleNodes.length !== 1) {
       skipped.push({
         frameName: card.name,
@@ -7198,7 +7198,7 @@ async function buildTitleFitForCard(card, rows, options, template, previewOnly =
       node.name = `строка ${i + 1}`;
       titleFrame.appendChild(node);
 
-      // Keep the v8.1 line-break logic, but force a REAL visual refresh:
+      // Keep the existing line-break logic, but force a REAL visual refresh:
       // every new row starts at Max Font and shrinks only if its actual
       // Figma TextNode.width exceeds the available width.
       await maximizeTitleRowToWidth(
