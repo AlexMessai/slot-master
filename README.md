@@ -1,4 +1,4 @@
-# Slot Master v13.25
+# Slot Master v1.0
 
 Figma plugin by Alexey Kylik for bulk synchronization, renaming, normalization, title fitting, sorting, and styling of casino and slot-game cards.
 
